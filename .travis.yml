@@ -10,3 +10,4 @@ deploy:
   domain: acrosshealth
   on:
     repo: davet1985/ehrscape-provisioner
+  skip_cleanup: true
