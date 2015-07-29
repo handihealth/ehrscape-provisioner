@@ -1,1 +1,67 @@
 <h1>EhrScape Provisioner</h1>
+<div class="row">
+  <div class="small-8 columns action-list">
+    <div class="row">
+      <div class="small-12 columns">
+        <h4>Action list</h4>
+      </div>
+    </div>
+    <div class="row">
+      <div class="small-12 columns">
+        <button ng-click="start()">Go!</button>
+      </div>
+    </div>
+  </div>
+  <div class="small-4 columns panel config-box">
+    <div class="row">
+      <div class="small-12 columns">
+        <h4>EhrScape configuration</h4>
+      </div>
+    </div>
+    <div class="row">
+      <div class="small-12 columns">
+        <input type="text" name="ehrscapeBaseUrl" ng-model="ehrscapeDetails.baseUrl" value="{{ehrscapeDetails.baseUrl}}"/>
+      </div>
+    </div>
+    <div class="row">
+      <div class="small-6 columns">
+        <input type="text" name="ehrscapeUsername" ng-model="ehrscapeDetails.username" value="{{ehrscapeDetails.username}}" placeholder="Username"/>
+      </div>
+      <div class="small-6 columns">
+        <input type="text" name="ehrscapePassword" ng-model="ehrscapeDetails.password" value="{{ehrscapeDetails.password}}" placeholder="Password"/>
+      </div>
+    </div>
+    <div class="row">
+      <div class="small-12 columns">
+        <input type="text" name="ehrscapeSessionId" ng-model="ehrscapeDetails.sessionId" value="{{ehrscapeDetails.sessionId}}" placeholder="Session ID"/>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="small-12 columns">
+    <div class="row" ng-repeat="action in actionList">
+      <div class="small-12 columns">
+        <div class="row">
+          <div class="small-12 columns">
+            <h4>{{action.name}}</h4>
+          </div>
+        </div>
+        <div class="row">
+          <div class="small-12 columns">
+            <div class="alert-box success">
+              <div class="row">
+                <div class="small-1 columns">
+                  <strong>{{action.requestMethod}}</strong>
+                </div>
+                <div class="small-11 columns">
+                  {{ehrscapeDetails.baseUrl}}{{action.urlExtension}}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
