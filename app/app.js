@@ -4,7 +4,9 @@
 angular.module('ehrscapeProvisioner', [
   'ngRoute',
   'ngResource',
-  'ehrscapeProvisioner.home'
+  'ehrscapeProvisioner.home',
+  'ehrscapeProvisioner.ehrscapeConfig',
+  'ehrscapeProvisioner.Action'
 ])
 
 .config(['$routeProvider', function($routeProvider) {

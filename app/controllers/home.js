@@ -10,35 +10,21 @@ angular.module('ehrscapeProvisioner.home', ['ngRoute'])
     });
 }])
 
-.controller('HomeCtrl', ['$scope', '$http', function($scope, $http) {
-  $scope.ehrscapeDetails = new EhrscapeConfig();
-  $scope.actionList = prepareActionList($scope.ehrscapeDetails);
+.controller('HomeCtrl', ['$rootScope', '$scope', '$http', 'ehrscapeConfig', 'Action', function($rootScope, $scope, $http, ehrscapeConfig, Action) {
+  $rootScope.ehrscapeConfig = ehrscapeConfig;
+  $scope.actionList = prepareActionList(Action);
 
   $scope.start = function() {
-    console.log($scope.ehrscapeDetails);
-    console.log($scope.actionList);
-
-    $http.post('https://rest.ehrscape.com/rest/v1/session?username=c4h_across&password=CABERMAl', {}).
-      success(function(data, status, headers, config) {
-        // this callback will be called asynchronously
-        // when the response is available
-        console.log(data);
-        $scope.ehrscapeDetails.sessionId = data.sessionId;
-        console.log(status);
-      }).
-      error(function(data, status, headers, config) {
-        // called asynchronously if an error occurs
-        // or server returns response with an error status.
-        console.log(data);
-        console.log(status);
-      });
-    };
+    for (var i = 0; i < $scope.actionList.length; i++) {
+      $scope.actionList[i].performHttpRequest();
+    }
+  };
 
 }]);
 
-function prepareActionList(ehrscpaeConfig) {
+function prepareActionList(Action) {
   var actionList = [];
-  actionList.push(new EhrscapeAction(ehrscpaeConfig, {
+  actionList.push(new Action({
     name: 'Login',
     urlExtension: 'session',
     requestMethod: 'POST'
