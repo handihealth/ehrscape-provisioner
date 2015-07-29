@@ -5,4 +5,11 @@ html
     link(rel='stylesheet', href='/stylesheets/style.css')
     script(src='/javascripts/app.js', type='text/javascript')
   body
-    block content
+    nav.top-bar(data-topbar='', role='navigation')
+      ul.title-area
+        li.name
+          h1
+            a(href='/') ACROSS Health Limited
+    .row.main
+      .small-12.columns
+        block content

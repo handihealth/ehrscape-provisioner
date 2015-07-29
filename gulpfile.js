@@ -29,9 +29,9 @@ gulp.task('combine-angular', function() {
 
 gulp.task('sass', function () {
   gulp.src([
-      './bower_components/foundation/scss/normalize.scss',
-      './bower_components/foundation/scss/foundation.scss',
-      './bower_components/nsPopover/sass/ns-popover.scss',
+      './app/bower_components/foundation/scss/normalize.scss',
+      './app/bower_components/foundation/scss/foundation.scss',
+      './app/bower_components/nsPopover/sass/ns-popover.scss',
       './assets/stylesheets/style.scss'
     ])
     .pipe(sass())
@@ -40,5 +40,6 @@ gulp.task('sass', function () {
 });
 
 gulp.task('watch', function() {
+  gulp.watch('./assets/stylesheets/*.scss', ['sass']);
   gulp.watch(['./app/*.js', './app/*/*.js'], ['combine-angular']);
 });
