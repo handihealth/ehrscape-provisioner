@@ -12,36 +12,54 @@ angular.module('ehrscapeProvisioner.Action', [])
     this.requestBody = '';
     this.responseCode = '';
     this.responseBody = '';
+    this.status = 'Not started';
   }
 
   Action.prototype.setUrlParameters = function(params) {
-    console.log(params);
+    this.urlParams = params;
   }
 
-  Action.prototype.performHttpRequest = function() {
+  Action.prototype.performHttpRequest = function(callback) {
+    this.status = 'Pending';
     if (this.requestMethod === 'POST') {
-      performHttpPost();
+      this.performHttpPost(callback);
     }
     if (this.requestMethod === 'GET') {
       performHttpGet();
     }
   }
 
-  function performHttpPost() {
-    $http.post('https://rest.ehrscape.com/rest/v1/session?username=c4h_across&password=CABERMAl', {}).
+  Action.prototype.getFullUrl = function() {
+    return $rootScope.ehrscapeConfig.baseUrl + this.urlExtension + this.constructUrlParameters(); // + '    ?username=c4h_across&password=CABERMAl';
+  }
+
+  Action.prototype.constructUrlParameters = function() {
+    var paramString = '';
+    if (this.urlParams.length > 0) {
+      paramString += '?';
+    }
+    for (var i = 0; i < this.urlParams.length; i++) {
+      paramString += this.urlParams[i].name + '=' + this.urlParams[i].value + '&';
+    }
+    return paramString;
+  }
+
+  Action.prototype.performHttpPost = function(callback) {
+    $http.post(this.getFullUrl(), {}).
       success(function(data, status, headers, config) {
         console.log(data);
         console.log(status);
-        $rootScope.ehrscapeConfig.sessionId = data.sessionId;
+        callback({status: 'Complete', sessionId: data.sessionId});
       }).
       error(function(data, status, headers, config) {
         console.log(data);
         console.log(status);
+        callback({status: 'Failed'});
       });
   }
 
   function performHttpGet() {
-    
+
   }
 
   return Action;
