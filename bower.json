@@ -10,6 +10,7 @@
     "angular-route": "1.2.x",
     "angular-foundation": "~0.6.0",
     "angular-resource": "1.2.x",
-    "ngQueue": "~0.1.0"
+    "ngQueue": "~0.1.0",
+    "sweetalert": "~1.1.0"
   }
 }

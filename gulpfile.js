@@ -13,6 +13,7 @@ gulp.task('combine-angular', function() {
       './app/bower_components/jquery/dist/jquery.min.js',
       './app/bower_components/foundation/js/vendor/modernizr.js',
       './app/bower_components/foundation/js/foundation.min.js',
+      './app/bower_components/sweetalert/dist/sweetalert.min.js',
       './app/bower_components/angular/angular.min.js',
       './app/bower_components/angular-route/angular-route.min.js',
       './app/bower_components/ngQueue/ngQueue.min.js',
@@ -33,7 +34,7 @@ gulp.task('sass', function () {
   gulp.src([
       './app/bower_components/foundation/scss/normalize.scss',
       './app/bower_components/foundation/scss/foundation.scss',
-      './app/bower_components/nsPopover/sass/ns-popover.scss',
+      './app/bower_components/sweetalert/dist/sweetalert.css',
       './assets/stylesheets/style.scss'
     ])
     .pipe(sass())

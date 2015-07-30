@@ -12,6 +12,12 @@ angular.module('ehrscapeProvisioner.home', ['ngRoute', 'ngQueue'])
 
 .controller('HomeCtrl', ['$rootScope', '$scope', '$http', '$queueFactory', 'ehrscapeConfig', 'Action', function($rootScope, $scope, $http, $queueFactory, ehrscapeConfig, Action) {
 
+  totalActionCount = 3;
+  completeActionCount = 0;
+
+  startTime = 0;
+  endTime = 0;
+
   prepareActionList = function(Action) {
     var actionList = [];
     actionList.push(new Action({
@@ -28,6 +34,7 @@ angular.module('ehrscapeProvisioner.home', ['ngRoute', 'ngQueue'])
       urlExtension: 'ehr',
       requestMethod: 'POST'
     }));
+
     return actionList;
   };
 
@@ -36,6 +43,7 @@ angular.module('ehrscapeProvisioner.home', ['ngRoute', 'ngQueue'])
     loginAction.status = result.status;
     loginAction.responseCode = result.responseCode;
     loginAction.responseBody = JSON.stringify(result.responseData, null, 2);
+    completeActionCount++;
   }
 
   afterLoginSuccess = function(loginAction, result) {
@@ -62,6 +70,7 @@ angular.module('ehrscapeProvisioner.home', ['ngRoute', 'ngQueue'])
           currAction.status = result.status;
           currAction.responseCode = result.responseCode;
           currAction.responseBody = JSON.stringify(result.responseData, null, 2);
+          completeActionCount++;
 
           if (currAction.id === 'CREATE_PATIENT') {
             var subjectId = result.responseData.meta.href;
@@ -80,8 +89,10 @@ angular.module('ehrscapeProvisioner.home', ['ngRoute', 'ngQueue'])
 
   $scope.start = function() {
 
+    completeActionCount = 0;
+
     if ($rootScope.ehrscapeConfig.username.length === 0 || $rootScope.ehrscapeConfig.password.length === 0) {
-      alert('Please enter username and password');
+      swal('Error', 'Please enter username and password');
       return;
     }
 
@@ -115,6 +126,10 @@ angular.module('ehrscapeProvisioner.home', ['ngRoute', 'ngQueue'])
     $scope.actionItem = $scope.loginAction;
     $scope.actionList = prepareActionList(Action);
   };
+
+  $scope.getPercentComplete = function() {
+    return (completeActionCount / totalActionCount * 100) + '%';
+  }
 
   $scope.reset();
 
