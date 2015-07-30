@@ -43,6 +43,7 @@ angular.module('ehrscapeProvisioner.home', ['ngRoute', 'ngQueue'])
   $scope.actionList = prepareActionList(Action);
 
   setLoginResponseData = function(loginAction, result) {
+    loginAction.endTime = Date.now();
     loginAction.status = result.status;
     loginAction.responseCode = result.responseCode;
     loginAction.responseBody = JSON.stringify(result.responseData, null, 2);
@@ -68,16 +69,15 @@ angular.module('ehrscapeProvisioner.home', ['ngRoute', 'ngQueue'])
         }
 
         return currAction.performHttpRequest(function(result) {
+          currAction.endTime = Date.now();
           currAction.status = result.status;
           currAction.responseCode = result.responseCode;
           currAction.responseBody = JSON.stringify(result.responseData, null, 2);
 
           if (currAction.id === 'CREATE_PATIENT') {
-            console.log(result.responseData.meta.href);
             var subjectId = result.responseData.meta.href;
             subjectId = subjectId.substr(subjectId.lastIndexOf('/')+1);
             $rootScope.ehrscapeConfig.subjectId = subjectId;
-            console.log(subjectId);
           }
 
         });

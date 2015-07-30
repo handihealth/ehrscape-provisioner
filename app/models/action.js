@@ -16,6 +16,8 @@ angular.module('ehrscapeProvisioner.Action', [])
     this.responseCode = '';
     this.responseBody = '';
     this.status = 'Not started';
+    this.startTime = 0;
+    this.endTime = 0;
   }
 
   Action.prototype.setUrlParameters = function(params) {
@@ -24,6 +26,7 @@ angular.module('ehrscapeProvisioner.Action', [])
 
   Action.prototype.performHttpRequest = function(success, failure) {
     this.status = 'Pending';
+    this.startTime = Date.now();
     var req = {
       method: this.requestMethod,
       url: this.getFullUrl(),
@@ -32,13 +35,9 @@ angular.module('ehrscapeProvisioner.Action', [])
     };
     return $http(req).
       success(function(data, status, headers, config) {
-        console.log(status);
-        console.log(data);
         success({status: 'Complete', responseCode: status, responseData: data});
       }).
       error(function(data, status, headers, config) {
-        console.log(status);
-        console.log(data);
         failure({status: 'Failed', responseCode: status, responseData: data});
       });
   }
@@ -101,6 +100,10 @@ angular.module('ehrscapeProvisioner.Action', [])
     } else {
       return JSON.stringify(this.requestBody, null, 2);
     }
+  }
+
+  Action.prototype.getTimeTaken = function() {
+    return this.endTime - this.startTime;
   }
 
   return Action;
