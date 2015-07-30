@@ -53,7 +53,14 @@ angular.module('ehrscapeProvisioner.Action', [])
       paramString += '?';
     }
     for (var i = 0; i < this.urlParams.length; i++) {
-      paramString += this.urlParams[i].name + '=' + this.urlParams[i].value + '&';
+      if (this.urlParams[i].config) {
+        paramString += this.urlParams[i].name + '=' + $rootScope.ehrscapeConfig[this.urlParams[i].value];
+      } else {
+        paramString += this.urlParams[i].name + '=' + this.urlParams[i].value;
+      }
+      if (i < this.urlParams.length-1) {
+        paramString += '&';
+      }
     }
     return paramString;
   }
