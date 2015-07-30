@@ -12,3 +12,15 @@
     padding-bottom: 10px;
   }
 }
+
+.response-summary {
+  padding-bottom: 10px;
+  .response-body {
+    font-size: 0.8em;
+  }
+}
+
+.request-summary {
+  height: 50px;
+  margin-bottom: 10px;
+}
