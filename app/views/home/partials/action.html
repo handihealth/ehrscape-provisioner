@@ -1,0 +1,39 @@
+<div class="small-12 columns">
+  <div class="row">
+  </div>
+  <div class="row">
+    <div class="small-12 columns">
+      <div class="request-summary alert-box" ng-class="actionItem.getStatusClass()">
+        <div class="row">
+          <div class="small-2 columns">
+            <strong>{{actionItem.name}}</strong>
+          </div>
+          <div class="small-9 columns">
+            {{actionItem.getFullUrl()}}
+          </div>
+          <div class="small-1 columns text-right">
+            <strong>{{actionItem.requestMethod}}</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="response-summary" ng-show="actionItem.showResults()">
+    <div class="row">
+      <div class="small-1 columns text-center">
+        <strong>Code</strong>
+      </div>
+      <div class="small-11 columns">
+        <strong>Body</strong>
+      </div>
+    </div>
+    <div class="row" ng-show="actionItem.showResults">
+      <div class="small-1 columns text-center">
+        {{actionItem.responseCode}}
+      </div>
+      <div class="small-11 columns">
+        <pre class="response-body">{{actionItem.responseBody}}</pre>
+      </div>
+    </div>
+  </div>
+</div>

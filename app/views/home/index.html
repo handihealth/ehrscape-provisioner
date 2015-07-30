@@ -37,55 +37,23 @@
         <input type="text" name="ehrscapeSessionId" ng-model="ehrscapeConfig.sessionId" value="{{ehrscapeConfig.sessionId}}" placeholder="Session ID"/>
       </div>
     </div>
+    <div class="row">
+      <div class="small-6 columns">
+        <input type="text" name="ehrscapeSubjectNamespace" ng-model="ehrscapeConfig.subjectNamespace" value="{{ehrscapeConfig.subjectNamespace}}" placeholder="Subject namespace"/>
+      </div>
+      <div class="small-6 columns">
+        <input type="text" name="ehrscapeSubjectId" ng-model="ehrscapeConfig.subjectId" value="{{ehrscapeConfig.subjectId}}" placeholder="Subject ID"/>
+      </div>
+    </div>
   </div>
 </div>
 <div class="row">
   <div class="small-12 columns">
     <div class="row">
-      <div class="small-12 columns">
-        <div class="row">
-          <div class="small-12 columns">
-            <h4>{{loginAction.name}} ({{loginAction.status}})</h4>
-          </div>
-        </div>
-        <div class="row">
-          <div class="small-12 columns">
-            <div class="alert-box success">
-              <div class="row">
-                <div class="small-1 columns">
-                  <strong>{{loginAction.requestMethod}}</strong>
-                </div>
-                <div class="small-11 columns">
-                  {{loginAction.getFullUrl()}}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <div action/>
     </div>
-    <div class="row" ng-repeat="action in actionList">
-      <div class="small-12 columns">
-        <div class="row">
-          <div class="small-12 columns">
-            <h4>{{action.name}} ({{action.status}})</h4>
-          </div>
-        </div>
-        <div class="row">
-          <div class="small-12 columns">
-            <div class="alert-box success">
-              <div class="row">
-                <div class="small-1 columns">
-                  <strong>{{action.requestMethod}}</strong>
-                </div>
-                <div class="small-11 columns">
-                  {{action.getFullUrl()}}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+    <div class="row" ng-repeat="actionItem in actionList">
+      <div action/>
     </div>
   </div>
 </div>
