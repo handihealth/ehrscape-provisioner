@@ -5,6 +5,7 @@ angular.module('ehrscapeProvisioner.Action', [])
 .factory('Action', function($http, $rootScope) {
 
   function Action(props) {
+    this.id = props.id;
     this.name = props.name;
     this.urlExtension = props.urlExtension;
     this.urlParams = [];
@@ -31,10 +32,14 @@ angular.module('ehrscapeProvisioner.Action', [])
     };
     return $http(req).
       success(function(data, status, headers, config) {
-        success({status: 'Complete', sessionId: data.sessionId});
+        console.log(status);
+        console.log(data);
+        success({status: 'Complete', responseCode: status, responseData: data});
       }).
       error(function(data, status, headers, config) {
-        failure({status: 'Failed'});
+        console.log(status);
+        console.log(data);
+        failure({status: 'Failed', responseCode: status, responseData: data});
       });
   }
 
@@ -62,6 +67,25 @@ angular.module('ehrscapeProvisioner.Action', [])
       headers[this.requestHeaders[i].name] = this.requestHeaders[i].value;
     }
     return headers;
+  }
+
+  Action.prototype.showResults = function() {
+    return this.status === 'Failed' || this.status === 'Complete'
+  }
+
+  Action.prototype.getStatusClass = function() {
+    if (this.status === 'Not started') {
+      return 'secondary';
+    }
+    if (this.status === 'Pending') {
+      return '';
+    }
+    if (this.status === 'Complete') {
+      return 'success';
+    }
+    if (this.status === 'Failed') {
+      return 'alert';
+    }
   }
 
   return Action;

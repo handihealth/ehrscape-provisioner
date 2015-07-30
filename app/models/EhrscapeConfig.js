@@ -8,7 +8,9 @@ angular.module('ehrscapeProvisioner.ehrscapeConfig', [])
     baseUrl: 'https://rest.ehrscape.com/rest/v1/',
     username: '',
     password: '',
-    sessionId: ''
+    sessionId: '',
+    subjectNamespace: 'uk.nhs.nhsnumber',
+    subjectId: '',
   }
 
 });
