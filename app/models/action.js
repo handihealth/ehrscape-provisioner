@@ -95,6 +95,14 @@ angular.module('ehrscapeProvisioner.Action', [])
     }
   }
 
+  Action.prototype.getFormattedRequestBody = function() {
+    if (this.requestBody.length === 0) {
+      return '';
+    } else {
+      return JSON.stringify(this.requestBody, null, 2);
+    }
+  }
+
   return Action;
 
 });

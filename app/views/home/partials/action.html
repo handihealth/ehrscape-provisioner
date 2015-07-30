@@ -3,7 +3,7 @@
   </div>
   <div class="row">
     <div class="small-12 columns">
-      <div class="request-summary alert-box" ng-class="actionItem.getStatusClass()">
+      <div class="request-header alert-box" ng-class="actionItem.getStatusClass()">
         <div class="row">
           <div class="small-2 columns">
             <strong>{{actionItem.name}}</strong>
@@ -18,21 +18,39 @@
       </div>
     </div>
   </div>
-  <div class="response-summary" ng-show="actionItem.showResults()">
-    <div class="row">
-      <div class="small-1 columns text-center">
-        <strong>Code</strong>
-      </div>
-      <div class="small-11 columns">
-        <strong>Body</strong>
+  <div class="row" ng-show="actionItem.showResults()">
+    <div class="small-6 columns">
+      <div class="request-summary panel">
+        <div class="row request-title">
+          <div class="small-6 columns">
+            <strong>Request</strong>
+          </div>
+          <div class="small-6 columns text-right">
+            Time taken: <span class="time-taken">{{actionItem.responseCode}}ms</span>
+          </div>
+        </div>
+        <div class="row">
+          <div class="small-12 columns">
+            <pre class="request-body">{{actionItem.getFormattedRequestBody()}}</pre>
+          </div>
+        </div>
       </div>
     </div>
-    <div class="row" ng-show="actionItem.showResults">
-      <div class="small-1 columns text-center">
-        {{actionItem.responseCode}}
-      </div>
-      <div class="small-11 columns">
-        <pre class="response-body">{{actionItem.responseBody}}</pre>
+    <div class="small-6 columns">
+      <div class="response-summary panel">
+        <div class="row response-title">
+          <div class="small-6 columns">
+            <strong>Response</strong>
+          </div>
+          <div class="small-6 columns text-right">
+            Status code: <span class="status-code">{{actionItem.responseCode}}</span>
+          </div>
+        </div>
+        <div class="row">
+          <div class="small-12 columns">
+            <pre class="response-body">{{actionItem.responseBody}}</pre>
+          </div>
+        </div>
       </div>
     </div>
   </div>
