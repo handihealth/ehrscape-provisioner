@@ -22,14 +22,12 @@ angular.module('ehrscapeProvisioner.home', ['ngRoute', 'ngQueue'])
       requestHeaders: [{name: 'Content-Type', value: 'application/json'}],
       requestBody: postPartyRequestBody
     }));
-
     actionList.push(new Action({
       id: 'CREATE_EHR',
       name: 'Create EHR',
       urlExtension: 'ehr',
       requestMethod: 'POST'
     }));
-
     return actionList;
   };
 
@@ -62,9 +60,9 @@ angular.module('ehrscapeProvisioner.home', ['ngRoute', 'ngQueue'])
         if (currAction.id === 'CREATE_EHR') {
           currAction.setUrlParameters(
             [
-              {name: 'subjectId', value: 'subjectId', config: true},
-              {name: 'subjectNamespace', value: 'subjectNamespace', config: true},
-              {name: 'commiterName', value: 'commiterName', config: true},
+              {name: 'subjectId', config: true},
+              {name: 'subjectNamespace', config: true},
+              {name: 'commiterName', config: true},
             ]
           );
         }
@@ -100,8 +98,8 @@ angular.module('ehrscapeProvisioner.home', ['ngRoute', 'ngQueue'])
 
     $scope.loginAction.setUrlParameters(
       [
-        {name: 'username', value: 'username', config: true},
-        {name: 'password', value: 'password', config: true}
+        {name: 'username', config: true},
+        {name: 'password', config: true}
       ]
     );
     var loginAction = $scope.loginAction;
