@@ -4,6 +4,7 @@
 angular.module('ehrscapeProvisioner', [
   'ngRoute',
   'ngResource',
+  'ngQueue',
   'ehrscapeProvisioner.home',
   'ehrscapeProvisioner.ehrscapeConfig',
   'ehrscapeProvisioner.Action'

@@ -8,8 +8,10 @@ angular.module('ehrscapeProvisioner.Action', [])
     this.name = props.name;
     this.urlExtension = props.urlExtension;
     this.urlParams = [];
+    this.includeSessionHeader = props.includeSessionHeader == undefined ? true : props.includeSessionHeader;
     this.requestMethod = props.requestMethod;
-    this.requestBody = '';
+    this.requestHeaders = props.requestHeaders == undefined ? [] : props.requestHeaders;
+    this.requestBody = props.requestBody == undefined ? '' : props.requestBody;
     this.responseCode = '';
     this.responseBody = '';
     this.status = 'Not started';
@@ -19,18 +21,25 @@ angular.module('ehrscapeProvisioner.Action', [])
     this.urlParams = params;
   }
 
-  Action.prototype.performHttpRequest = function(callback) {
+  Action.prototype.performHttpRequest = function(success, failure) {
     this.status = 'Pending';
-    if (this.requestMethod === 'POST') {
-      this.performHttpPost(callback);
-    }
-    if (this.requestMethod === 'GET') {
-      performHttpGet();
-    }
+    var req = {
+      method: this.requestMethod,
+      url: this.getFullUrl(),
+      headers: this.getHeaders(),
+      data: JSON.stringify(postPartyRequestBody)
+    };
+    return $http(req).
+      success(function(data, status, headers, config) {
+        success({status: 'Complete', sessionId: data.sessionId});
+      }).
+      error(function(data, status, headers, config) {
+        failure({status: 'Failed'});
+      });
   }
 
   Action.prototype.getFullUrl = function() {
-    return $rootScope.ehrscapeConfig.baseUrl + this.urlExtension + this.constructUrlParameters(); // + '    ?username=c4h_across&password=CABERMAl';
+    return $rootScope.ehrscapeConfig.baseUrl + this.urlExtension + this.constructUrlParameters();
   }
 
   Action.prototype.constructUrlParameters = function() {
@@ -44,22 +53,15 @@ angular.module('ehrscapeProvisioner.Action', [])
     return paramString;
   }
 
-  Action.prototype.performHttpPost = function(callback) {
-    $http.post(this.getFullUrl(), {}).
-      success(function(data, status, headers, config) {
-        console.log(data);
-        console.log(status);
-        callback({status: 'Complete', sessionId: data.sessionId});
-      }).
-      error(function(data, status, headers, config) {
-        console.log(data);
-        console.log(status);
-        callback({status: 'Failed'});
-      });
-  }
-
-  function performHttpGet() {
-
+  Action.prototype.getHeaders = function() {
+    headers = {};
+    if (this.includeSessionHeader) {
+      headers['Ehr-Session'] = $rootScope.ehrscapeConfig.sessionId;
+    }
+    for (var i = 0; i < this.requestHeaders.length; i++) {
+      headers[this.requestHeaders[i].name] = this.requestHeaders[i].value;
+    }
+    return headers;
   }
 
   return Action;
