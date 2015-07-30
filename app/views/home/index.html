@@ -1,9 +1,34 @@
 <h1>EhrScape Provisioner</h1>
 <div class="row">
-  <div class="small-8 columns action-list">
+  <div class="small-12">
+    <div class="small-6 columns">
+      <h4>Action list</h4>
+    </div>
+    <div class="small-6 columns">
+      <h4>Configuration and parameters</h4>
+    </div>
+  </div>
+  <div class="small-6 columns">
     <div class="row">
       <div class="small-12 columns">
-        <h4>Action list</h4>
+        <table class="action-list">
+          <thead>
+            <tr>
+              <td>Name</td>
+              <td>Status</td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{{actionItem.name}}</td>
+              <td>{{actionItem.status}}</td>
+            </tr>
+            <tr ng-repeat="actionItem in actionList">
+              <td>{{actionItem.name}}</td>
+              <td>{{actionItem.status}}</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
     <div class="row">
@@ -13,17 +38,7 @@
       </div>
     </div>
   </div>
-  <div class="small-4 columns panel config-box">
-    <div class="row">
-      <div class="small-12 columns">
-        <h4>EhrScape configuration</h4>
-      </div>
-    </div>
-    <div class="row">
-      <div class="small-12 columns">
-        <input type="text" name="ehrscapeBaseUrl" ng-model="ehrscapeConfig.baseUrl" value="{{ehrscapeConfig.baseUrl}}"/>
-      </div>
-    </div>
+  <div class="small-6 columns config-box">
     <div class="row">
       <div class="small-6 columns">
         <input type="text" name="ehrscapeUsername" ng-model="ehrscapeConfig.username" value="{{ehrscapeConfig.username}}" placeholder="Username"/>
@@ -34,15 +49,20 @@
     </div>
     <div class="row">
       <div class="small-12 columns">
-        <input type="text" name="ehrscapeSessionId" ng-model="ehrscapeConfig.sessionId" value="{{ehrscapeConfig.sessionId}}" placeholder="Session ID"/>
+        <input type="text" disabled="true" name="ehrscapeBaseUrl" ng-model="ehrscapeConfig.baseUrl" value="{{ehrscapeConfig.baseUrl}}"/>
+      </div>
+    </div>
+    <div class="row">
+      <div class="small-12 columns">
+        <input type="text" disabled="true" name="ehrscapeSessionId" ng-model="ehrscapeConfig.sessionId" value="{{ehrscapeConfig.sessionId}}" placeholder="Session ID"/>
       </div>
     </div>
     <div class="row">
       <div class="small-6 columns">
-        <input type="text" name="ehrscapeSubjectNamespace" ng-model="ehrscapeConfig.subjectNamespace" value="{{ehrscapeConfig.subjectNamespace}}" placeholder="Subject namespace"/>
+        <input type="text" disabled="true" name="ehrscapeSubjectNamespace" ng-model="ehrscapeConfig.subjectNamespace" value="{{ehrscapeConfig.subjectNamespace}}" placeholder="Subject namespace"/>
       </div>
       <div class="small-6 columns">
-        <input type="text" name="ehrscapeSubjectId" ng-model="ehrscapeConfig.subjectId" value="{{ehrscapeConfig.subjectId}}" placeholder="Subject ID"/>
+        <input type="text" disabled="true" name="ehrscapeSubjectId" ng-model="ehrscapeConfig.subjectId" value="{{ehrscapeConfig.subjectId}}" placeholder="Subject ID"/>
       </div>
     </div>
   </div>

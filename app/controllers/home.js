@@ -31,17 +31,6 @@ angular.module('ehrscapeProvisioner.home', ['ngRoute', 'ngQueue'])
     return actionList;
   };
 
-  $rootScope.ehrscapeConfig = ehrscapeConfig;
-  $scope.loginAction = new Action({
-    id: 'LOGIN',
-    name: 'Login',
-    urlExtension: 'session',
-    requestMethod: 'POST',
-    includeSessionHeader: false
-  });
-  $scope.actionItem = $scope.loginAction;
-  $scope.actionList = prepareActionList(Action);
-
   setLoginResponseData = function(loginAction, result) {
     loginAction.endTime = Date.now();
     loginAction.status = result.status;
@@ -115,7 +104,18 @@ angular.module('ehrscapeProvisioner.home', ['ngRoute', 'ngQueue'])
   };
 
   $scope.reset = function() {
+    $rootScope.ehrscapeConfig = ehrscapeConfig;
+    $scope.loginAction = new Action({
+      id: 'LOGIN',
+      name: 'Login',
+      urlExtension: 'session',
+      requestMethod: 'POST',
+      includeSessionHeader: false
+    });
+    $scope.actionItem = $scope.loginAction;
     $scope.actionList = prepareActionList(Action);
   };
+
+  $scope.reset();
 
 }]);
