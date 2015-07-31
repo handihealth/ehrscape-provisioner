@@ -19,12 +19,6 @@
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>{{actionItem.name}}</td>
-              <td>{{actionItem.requestMethod}}</td>
-              <td>{{actionItem.getFullUrl()}}</td>
-              <td>{{actionItem.status}}</td>
-            </tr>
             <tr ng-repeat="actionItem in actionList">
               <td>{{actionItem.name}}</td>
               <td>{{actionItem.requestMethod}}</td>
@@ -37,8 +31,8 @@
     </div>
     <div class="row">
       <div class="small-12 columns">
-        <button ng-click="start()">Go!</button>
-        <button ng-click="reset()">Reset</button>
+        <button class="button small" ng-click="start()">Go!</button>
+        <button class="button small secondary" ng-click="reset()">Reset</button>
       </div>
     </div>
     <div class="row">
@@ -85,9 +79,6 @@
 </div>
 <div class="row">
   <div class="small-12 columns">
-    <div class="row">
-      <div action/>
-    </div>
     <div class="row" ng-repeat="actionItem in actionList">
       <div action/>
     </div>
