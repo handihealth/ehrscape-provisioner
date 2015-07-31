@@ -14,8 +14,6 @@ angular.module('ehrscapeProvisioner.home', ['ngRoute', 'ngQueue'])
 
   totalActionCount = 3;
   completeActionCount = 0;
-  startTime = 0;
-  endTime = 0;
 
   prepareActionList = function(Action) {
     var actionList = [];
@@ -86,12 +84,13 @@ angular.module('ehrscapeProvisioner.home', ['ngRoute', 'ngQueue'])
         var currAction = $scope.actionList[i];
         prePerformHttpRequest(currAction);
         return currAction.performHttpRequest(function(result) {
-          setResponseData(currAction, result);
-          postPerformHttpRequest(currAction, result);
-        }, function(result) {
-          setResponseData(currAction, result);
-          //TODO: if any requests fail then probably don't do the rest.
-        });
+            setResponseData(currAction, result);
+            postPerformHttpRequest(currAction, result);
+          }, function(result) {
+            setResponseData(currAction, result);
+            //TODO: if any requests fail then probably don't do the rest.
+          }
+        );
       });
     }
   }
@@ -134,6 +133,18 @@ angular.module('ehrscapeProvisioner.home', ['ngRoute', 'ngQueue'])
 
   $scope.getPercentComplete = function() {
     return (completeActionCount / totalActionCount * 100) + '%';
+  }
+
+  $scope.getTotalTimeTaken = function() {
+    var totalTime = 0;
+    for (var i = 0; i < $scope.actionList.length; i++) {
+      totalTime += $scope.actionList[i].getTimeTaken();
+    }
+    return totalTime;
+  }
+
+  $scope.showTotalProgressAndTime = function() {
+    return $scope.actionList[0].status === 'Complete' || $scope.actionList[0].status === 'Failed';
   }
 
   $scope.reset();

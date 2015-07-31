@@ -30,15 +30,22 @@
       </div>
     </div>
     <div class="row">
-      <div class="small-12 columns">
-        <button class="button small" ng-click="start()">Go!</button>
-        <button class="button small secondary" ng-click="reset()">Reset</button>
+      <div class="small-3 columns">
+        <button class="button" ng-click="start()">Go!</button>
+        <button class="button secondary" ng-click="reset()">Reset</button>
       </div>
-    </div>
-    <div class="row">
-      <div class="small-12 columns">
-        <div class="nice secondary progress text-center">
-          <span class="meter" style="width: {{getPercentComplete()}}"></span>
+      <div ng-show="showTotalProgressAndTime()">
+        <div class="small-9 columns">
+          <div class="row">
+            <div class="small-12 columns">
+              <span class="total-time">Total time taken: {{getTotalTimeTaken()}} ms</span>
+            </div>
+            <div class="small-12 columns">
+              <div class="progress">
+                <span class="meter" style="width: {{getPercentComplete()}}"></span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

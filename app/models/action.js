@@ -27,6 +27,7 @@ angular.module('ehrscapeProvisioner.Action', [])
   Action.prototype.performHttpRequest = function(success, failure) {
     this.status = 'Pending';
     this.startTime = Date.now();
+    this.endTime = Date.now();
     var req = {
       method: this.requestMethod,
       url: this.getFullUrl(),
