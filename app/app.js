@@ -6,6 +6,7 @@ angular.module('ehrscapeProvisioner', [
   'ngResource',
   'ngQueue',
   'ehrscapeProvisioner.home',
+  'ehrscapeProvisioner.markdown',
   'ehrscapeProvisioner.ehrscapeConfig',
   'ehrscapeProvisioner.Action'
 ])
