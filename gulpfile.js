@@ -17,14 +17,11 @@ gulp.task('combine-angular', function() {
       './app/bower_components/angular/angular.min.js',
       './app/bower_components/angular-route/angular-route.min.js',
       './app/bower_components/ngQueue/ngQueue.min.js',
-      './app/bower_components/angular-resource/angular-resource.min.js',
-      './app/bower_components/angular-foundation/mm-foundation-tpls.min.js',
       './app/app.js',
       './app/data/*.js',
       './app/models/*.js',
       './app/controllers/*.js',
       './app/directives/*.js',
-      './app/services/*.js'
     ])
     .pipe(concat('app.js'))
     .pipe(gulp.dest('./public/javascripts'));
