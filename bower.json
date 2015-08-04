@@ -6,8 +6,8 @@
   "dependencies": {
     "jquery": "~2.1.4",
     "foundation": "5.5.1",
-    "angular": "1.2.x",
-    "angular-route": "1.2.x",
+    "angular": "1.4.x",
+    "angular-route": "1.4.x",
     "angular-foundation": "~0.6.0",
     "ngQueue": "~0.1.0",
     "sweetalert": "~1.1.0",
