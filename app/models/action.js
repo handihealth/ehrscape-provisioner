@@ -66,7 +66,7 @@ angular.module('ehrscapeProvisioner.Action', [])
   }
 
   Action.prototype.getHeaders = function() {
-    headers = {};
+    var headers = {};
     if (this.includeSessionHeader) {
       headers['Ehr-Session'] = $rootScope.ehrscapeConfig.sessionId;
     }

@@ -12,10 +12,44 @@ angular.module('ehrscapeProvisioner.home', ['ngRoute', 'ngQueue'])
 
 .controller('HomeCtrl', ['$rootScope', '$scope', '$http', '$queueFactory', 'ehrscapeConfig', 'Action', function($rootScope, $scope, $http, $queueFactory, ehrscapeConfig, Action) {
 
-  totalActionCount = 3;
-  completeActionCount = 0;
+  var totalActionCount = 0;
+  var completeActionCount = 0;
 
-  prepareActionList = function(Action) {
+  $scope.start = function() {
+    completeActionCount = 0;
+    if ($rootScope.ehrscapeConfig.username.length === 0 || $rootScope.ehrscapeConfig.password.length === 0) {
+      swal('Error', 'Please enter username and password');
+      return;
+    }
+    processActionHttpRequests();
+  };
+
+  $scope.reset = function() {
+    $rootScope.ehrscapeConfig = ehrscapeConfig;
+    $scope.actionList = $scope.prepareActionList(Action);
+    this.completeActionCount = 0;
+  };
+
+  $scope.getPercentComplete = function() {
+    // console.log(completeActionCount);
+    // console.log(totalActionCount);
+    return (completeActionCount / totalActionCount * 100) + '%';
+  }
+
+  $scope.getTotalTimeTaken = function() {
+    var totalTime = 0;
+    for (var i = 0; i < $scope.actionList.length; i++) {
+      totalTime += $scope.actionList[i].getTimeTaken();
+    }
+    return totalTime;
+  }
+
+  $scope.showTotalProgressAndTime = function() {
+    return $scope.actionList[0].status === 'Complete' || $scope.actionList[0].status === 'Failed';
+  }
+
+  $scope.prepareActionList = function(Action) {
+    // console.log('prepareActionList');
     var actionList = [];
     actionList.push(new Action({
       id: 'LOGIN',
@@ -38,10 +72,15 @@ angular.module('ehrscapeProvisioner.home', ['ngRoute', 'ngQueue'])
       urlExtension: 'ehr',
       requestMethod: 'POST'
     }));
+    totalActionCount = actionList.length;
     return actionList;
   };
 
-  setResponseData = function(actionItem, result) {
+  // console.log('before reset');
+  $scope.reset();
+  // console.log('after reset');
+
+  var setResponseData = function(actionItem, result) {
     actionItem.endTime = Date.now();
     actionItem.status = result.status;
     actionItem.responseCode = result.responseCode;
@@ -49,7 +88,7 @@ angular.module('ehrscapeProvisioner.home', ['ngRoute', 'ngQueue'])
     completeActionCount++;
   }
 
-  prePerformHttpRequest = function(currAction) {
+  var prePerformHttpRequest = function(currAction) {
     if (currAction.id === 'LOGIN') {
       currAction.setUrlParameters(
         [
@@ -69,7 +108,7 @@ angular.module('ehrscapeProvisioner.home', ['ngRoute', 'ngQueue'])
     }
   }
 
-  postPerformHttpRequest = function(currAction, result) {
+  var postPerformHttpRequest = function(currAction, result) {
     if (currAction.id === 'CREATE_PATIENT') {
       var subjectId = result.responseData.meta.href;
       subjectId = subjectId.substr(subjectId.lastIndexOf('/')+1);
@@ -77,7 +116,7 @@ angular.module('ehrscapeProvisioner.home', ['ngRoute', 'ngQueue'])
     }
   }
 
-  queueFollowingActionHttpRequests = function() {
+  var queueFollowingActionHttpRequests = function() {
     var queue = $queueFactory($scope.actionList.length-1);
     for (var i = 1; i < $scope.actionList.length; i++) {
       queue.enqueue(function () {
@@ -95,7 +134,7 @@ angular.module('ehrscapeProvisioner.home', ['ngRoute', 'ngQueue'])
     }
   }
 
-  processActionHttpRequests = function() {
+  var processActionHttpRequests = function() {
     var loginAction = $scope.actionList[0];
     loginAction.setUrlParameters(
       [
@@ -115,38 +154,5 @@ angular.module('ehrscapeProvisioner.home', ['ngRoute', 'ngQueue'])
       }
     });
   };
-
-  $scope.start = function() {
-    completeActionCount = 0;
-    if ($rootScope.ehrscapeConfig.username.length === 0 || $rootScope.ehrscapeConfig.password.length === 0) {
-      swal('Error', 'Please enter username and password');
-      return;
-    }
-    processActionHttpRequests();
-  };
-
-  $scope.reset = function() {
-    $rootScope.ehrscapeConfig = ehrscapeConfig;
-    $scope.actionList = prepareActionList(Action);
-    completeActionCount = 0;
-  };
-
-  $scope.getPercentComplete = function() {
-    return (completeActionCount / totalActionCount * 100) + '%';
-  }
-
-  $scope.getTotalTimeTaken = function() {
-    var totalTime = 0;
-    for (var i = 0; i < $scope.actionList.length; i++) {
-      totalTime += $scope.actionList[i].getTimeTaken();
-    }
-    return totalTime;
-  }
-
-  $scope.showTotalProgressAndTime = function() {
-    return $scope.actionList[0].status === 'Complete' || $scope.actionList[0].status === 'Failed';
-  }
-
-  $scope.reset();
 
 }]);
