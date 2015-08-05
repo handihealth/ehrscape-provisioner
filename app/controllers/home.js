@@ -53,7 +53,11 @@ angular.module('ehrscapeProvisioner.home', ['ngRoute', 'ngQueue'])
       name: 'Login',
       urlExtension: 'session',
       requestMethod: 'POST',
-      includeSessionHeader: false
+      includeSessionHeader: false,
+      urlParams: [
+        {name: 'username', config: true},
+        {name: 'password', config: true}
+      ]
     }));
     actionList.push(new Action({
       id: 'CREATE_PATIENT',
@@ -67,32 +71,19 @@ angular.module('ehrscapeProvisioner.home', ['ngRoute', 'ngQueue'])
       id: 'CREATE_EHR',
       name: 'Create EHR',
       urlExtension: 'ehr',
-      requestMethod: 'POST'
+      requestMethod: 'POST',
+      urlParams: [
+        {name: 'subjectId', config: true},
+        {name: 'subjectNamespace', config: true},
+        {name: 'commiterName', config: true},
+      ]
     }));
     totalActionCount = actionList.length;
     return actionList;
   };
 
-  $scope.reset();
-
-  var prePerformHttpRequest = function(currAction) {
-    if (currAction.id === 'LOGIN') {
-      currAction.setUrlParameters(
-        [
-          {name: 'username', config: true},
-          {name: 'password', config: true}
-        ]
-      );
-    }
-    if (currAction.id === 'CREATE_EHR') {
-      currAction.setUrlParameters(
-        [
-          {name: 'subjectId', config: true},
-          {name: 'subjectNamespace', config: true},
-          {name: 'commiterName', config: true},
-        ]
-      );
-    }
+  if (completeActionCount === 0) {
+    $scope.reset();
   }
 
   var postPerformHttpRequest = function(currAction, result) {
@@ -106,6 +97,9 @@ angular.module('ehrscapeProvisioner.home', ['ngRoute', 'ngQueue'])
       subjectId = subjectId.substr(subjectId.lastIndexOf('/')+1);
       $rootScope.ehrscapeConfig.subjectId = subjectId;
     }
+    if (currAction.id === 'CREATE_EHR') {
+      $rootScope.ehrscapeConfig.ehrId = result.ehrId;
+    }
   }
 
   var queueFollowingActionHttpRequests = function() {
@@ -113,7 +107,6 @@ angular.module('ehrscapeProvisioner.home', ['ngRoute', 'ngQueue'])
     for (var i = 1; i < $scope.actionList.length; i++) {
       queue.enqueue(function () {
         var currAction = $scope.actionList[i];
-        prePerformHttpRequest(currAction);
         return currAction.performHttpRequest(function(result) {
             postPerformHttpRequest(currAction, result);
           }, function(result) {
@@ -126,7 +119,6 @@ angular.module('ehrscapeProvisioner.home', ['ngRoute', 'ngQueue'])
 
   var processActionHttpRequests = function() {
     var loginAction = $scope.actionList[0];
-    prePerformHttpRequest(loginAction);
     loginAction.performHttpRequest(function(result) {
       postPerformHttpRequest(loginAction, result);
     }, function(result) {

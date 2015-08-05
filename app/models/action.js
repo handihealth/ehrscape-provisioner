@@ -8,7 +8,7 @@ angular.module('ehrscapeProvisioner.Action', [])
     this.id = props.id;
     this.name = props.name;
     this.urlExtension = props.urlExtension;
-    this.urlParams = [];
+    this.urlParams = props.urlParams == undefined ? [] : props.urlParams;
     this.includeSessionHeader = props.includeSessionHeader == undefined ? true : props.includeSessionHeader;
     this.requestMethod = props.requestMethod;
     this.requestHeaders = props.requestHeaders == undefined ? [] : props.requestHeaders;
@@ -114,7 +114,7 @@ angular.module('ehrscapeProvisioner.Action', [])
   }
 
   Action.prototype.getFormattedResponseBody = function() {
-    if (this.responseBody.length === 0) {
+    if (this.responseBody === null || this.responseBody.length === 0) {
       return '';
     } else {
       return JSON.stringify(this.responseBody, null, 2);

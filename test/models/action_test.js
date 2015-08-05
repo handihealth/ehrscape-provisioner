@@ -4,8 +4,8 @@ describe('ehrscapeProvisioner.Action module', function() {
 
   beforeEach(module('ehrscapeProvisioner.Action'));
 
-  var myAction = null;
-  var $httpBackend, $rootScope, authRequestHandler;
+  var myAction;
+  var $httpBackend, $rootScope;
 
   beforeEach(inject(function(_$httpBackend_, _$rootScope_, _Action_) {
     var Action = _Action_;

@@ -11,6 +11,7 @@ angular.module('ehrscapeProvisioner.ehrscapeConfig', [])
     sessionId: '',
     subjectNamespace: 'uk.nhs.nhsnumber',
     subjectId: '',
+    ehrId: '',
     commiterName: 'ehrscapeProvisioner'
   }
 
