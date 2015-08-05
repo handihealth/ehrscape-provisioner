@@ -10,7 +10,7 @@ angular.module('ehrscapeProvisioner.home', ['ngRoute', 'ngQueue'])
     });
 }])
 
-.controller('HomeCtrl', ['$rootScope', '$scope', '$http', '$queueFactory', 'ehrscapeConfig', 'Action', function($rootScope, $scope, $http, $queueFactory, ehrscapeConfig, Action) {
+.controller('HomeCtrl', ['$rootScope', '$scope', '$queueFactory', 'ehrscapeConfig', 'Action', function($rootScope, $scope, $queueFactory, ehrscapeConfig, Action) {
 
   var totalActionCount = 0;
   var completeActionCount = 0;
