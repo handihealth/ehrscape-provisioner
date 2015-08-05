@@ -31,8 +31,6 @@ angular.module('ehrscapeProvisioner.home', ['ngRoute', 'ngQueue'])
   };
 
   $scope.getPercentComplete = function() {
-    // console.log(completeActionCount);
-    // console.log(totalActionCount);
     return (completeActionCount / totalActionCount * 100) + '%';
   }
 
@@ -49,7 +47,6 @@ angular.module('ehrscapeProvisioner.home', ['ngRoute', 'ngQueue'])
   }
 
   $scope.prepareActionList = function(Action) {
-    // console.log('prepareActionList');
     var actionList = [];
     actionList.push(new Action({
       id: 'LOGIN',
@@ -76,17 +73,7 @@ angular.module('ehrscapeProvisioner.home', ['ngRoute', 'ngQueue'])
     return actionList;
   };
 
-  // console.log('before reset');
   $scope.reset();
-  // console.log('after reset');
-
-  var setResponseData = function(actionItem, result) {
-    actionItem.endTime = Date.now();
-    actionItem.status = result.status;
-    actionItem.responseCode = result.responseCode;
-    actionItem.responseBody = JSON.stringify(result.responseData, null, 2);
-    completeActionCount++;
-  }
 
   var prePerformHttpRequest = function(currAction) {
     if (currAction.id === 'LOGIN') {
@@ -109,8 +96,13 @@ angular.module('ehrscapeProvisioner.home', ['ngRoute', 'ngQueue'])
   }
 
   var postPerformHttpRequest = function(currAction, result) {
+    completeActionCount++;
+    if (currAction.id === 'LOGIN') {
+      $rootScope.ehrscapeConfig.sessionId = result.sessionId;
+      queueFollowingActionHttpRequests();
+    }
     if (currAction.id === 'CREATE_PATIENT') {
-      var subjectId = result.responseData.meta.href;
+      var subjectId = result.meta.href;
       subjectId = subjectId.substr(subjectId.lastIndexOf('/')+1);
       $rootScope.ehrscapeConfig.subjectId = subjectId;
     }
@@ -123,11 +115,9 @@ angular.module('ehrscapeProvisioner.home', ['ngRoute', 'ngQueue'])
         var currAction = $scope.actionList[i];
         prePerformHttpRequest(currAction);
         return currAction.performHttpRequest(function(result) {
-            setResponseData(currAction, result);
             postPerformHttpRequest(currAction, result);
           }, function(result) {
-            setResponseData(currAction, result);
-            //TODO: if any requests fail then probably don't do the rest.
+            postPerformHttpRequest(currAction, result);
           }
         );
       });
@@ -136,18 +126,10 @@ angular.module('ehrscapeProvisioner.home', ['ngRoute', 'ngQueue'])
 
   var processActionHttpRequests = function() {
     var loginAction = $scope.actionList[0];
-    loginAction.setUrlParameters(
-      [
-        {name: 'username', config: true},
-        {name: 'password', config: true}
-      ]
-    );
+    prePerformHttpRequest(loginAction);
     loginAction.performHttpRequest(function(result) {
-      setResponseData(loginAction, result);
-      $rootScope.ehrscapeConfig.sessionId = result.responseData.sessionId;
-      queueFollowingActionHttpRequests();
+      postPerformHttpRequest(loginAction, result);
     }, function(result) {
-      setResponseData(loginAction, result);
       if ($rootScope.ehrscapeConfig.sessionId === '') {
         swal('Error', 'Authentication failed, please check the username and password.');
         return;

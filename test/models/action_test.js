@@ -26,22 +26,21 @@ describe('ehrscapeProvisioner.Action module', function() {
     $httpBackend.verifyNoOutstandingRequest();
   });
 
-  it('should set certain attributes when starting http request', function() {
-    $httpBackend.when('POST', 'https://rest.ehrscape.com/rest/v1/test-extension').respond(201);
-    myAction.performHttpRequest(function(result) {
-      expect(myAction.status).toBe('Pending');
-      expect(myAction.startTime).not.toBe(0);
-      expect(myAction.endTime).not.toBe(0);
-    });
-    $httpBackend.flush();
+  it('should process http response', function() {
+    myAction.processHttpResponse({status: 'Complete', responseCode: 201, responseData: { sessionId: '1234-5678-abcd-efgh'}});
+    expect(myAction.status).toBe('Complete');
+    expect(myAction.responseCode).toBe(201);
   });
 
   it('should perform http request successfully', function() {
     $httpBackend.when('POST', 'https://rest.ehrscape.com/rest/v1/test-extension').respond(201, { sessionId: '1234-5678-abcd-efgh'});
     myAction.performHttpRequest(function(result) {
-      expect(result.status).toBe('Complete');
-      expect(result.responseCode).toBe(201);
-      expect(result.responseData).toEqual({ sessionId: '1234-5678-abcd-efgh'});
+      expect(myAction.status).toBe('Complete');
+      expect(myAction.responseCode).toBe(201);
+      expect(myAction.startTime).not.toBe(0);
+      expect(myAction.endTime).not.toBe(0);
+      expect(myAction.responseBody).toEqual({ sessionId: '1234-5678-abcd-efgh'});
+      expect(result).toEqual({ sessionId: '1234-5678-abcd-efgh'});
     });
     $httpBackend.flush();
   });
@@ -49,9 +48,12 @@ describe('ehrscapeProvisioner.Action module', function() {
   it('should perform http request with failure', function() {
     $httpBackend.when('POST', 'https://rest.ehrscape.com/rest/v1/test-extension').respond(401, { status: 401, code: 'SYS-9401', userMessage: 'Could not authenticate the user' });
     myAction.performHttpRequest(function() {}, function(result) {
-      expect(result.status).toBe('Failed');
-      expect(result.responseCode).toBe(401);
-      expect(result.responseData).toEqual({ status: 401, code: 'SYS-9401', userMessage: 'Could not authenticate the user' });
+      expect(myAction.status).toBe('Failed');
+      expect(myAction.responseCode).toBe(401);
+      expect(myAction.startTime).not.toBe(0);
+      expect(myAction.endTime).not.toBe(0);
+      expect(myAction.responseBody).toEqual({ status: 401, code: 'SYS-9401', userMessage: 'Could not authenticate the user' });
+      expect(result).toEqual({ status: 401, code: 'SYS-9401', userMessage: 'Could not authenticate the user' });
     });
     $httpBackend.flush();
   });

@@ -24,10 +24,18 @@ angular.module('ehrscapeProvisioner.Action', [])
     this.urlParams = params;
   }
 
+  Action.prototype.processHttpResponse = function(result) {
+    this.endTime = Date.now();
+    this.status = result.status;
+    this.responseCode = result.responseCode;
+    this.responseBody = result.responseData;
+  }
+
   Action.prototype.performHttpRequest = function(success, failure) {
     this.status = 'Pending';
     this.startTime = Date.now();
     this.endTime = Date.now();
+    var _this = this;
     var req = {
       method: this.requestMethod,
       url: this.getFullUrl(),
@@ -36,10 +44,12 @@ angular.module('ehrscapeProvisioner.Action', [])
     };
     return $http(req).
       success(function(data, status, headers, config) {
-        success({status: 'Complete', responseCode: status, responseData: data});
+        _this.processHttpResponse({status: 'Complete', responseCode: status, responseData: data});
+        success(data);
       }).
       error(function(data, status, headers, config) {
-        failure({status: 'Failed', responseCode: status, responseData: data});
+        _this.processHttpResponse({status: 'Failed', responseCode: status, responseData: data});
+        failure(data);
       });
   }
 
@@ -100,6 +110,14 @@ angular.module('ehrscapeProvisioner.Action', [])
       return '';
     } else {
       return JSON.stringify(this.requestBody, null, 2);
+    }
+  }
+
+  Action.prototype.getFormattedResponseBody = function() {
+    if (this.responseBody.length === 0) {
+      return '';
+    } else {
+      return JSON.stringify(this.responseBody, null, 2);
     }
   }
 
