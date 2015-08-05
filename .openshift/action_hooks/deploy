@@ -1,0 +1,3 @@
+#!/bin/bash
+cd $OPENSHIFT_REPO_DIR
+HOME=$OPENSHIFT_DATA_DIR gulp
