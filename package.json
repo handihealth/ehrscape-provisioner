@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": false,
   "scripts": {
-    "postinstall": "HOME=$OPENSHIFT_DATA_DIR bower install",
+    "postinstall": "HOME=$OPENSHIFT_DATA_DIR bower install && HOME=$OPENSHIFT_DATA_DIR gulp",
     "prestart": "npm install",
     "start": "node ./bin/www",
     "pretest": "npm install",
