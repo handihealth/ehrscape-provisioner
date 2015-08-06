@@ -7,7 +7,7 @@
     "prestart": "npm install",
     "start": "node ./bin/www",
     "pretest": "npm install",
-    "test": "karma start karma.conf.js --browsers Firefox --single-run"
+    "test": "karma start karma.conf.js --browsers Firefox --single-run && protractor e2e-test/protractor.conf.js --browsers Firefox"
   },
   "repository": {
     "type": "git",
