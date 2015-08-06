@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/davet1985/ehrscape-provisioner.svg?branch=master)](https://travis-ci.org/davet1985/ehrscape-provisioner)
 
-This app is built and deployed by Travis CI to Openshift, the resulting deploy can be found at [http://nodejs-acrosshealth.rhcloud.com/](http://nodejs-acrosshealth.rhcloud.com/)
+This app is built and deployed by Travis CI to Openshift, the resulting deploy can be found at [http://provisioner-handihopd.rhcloud.com/](http://provisioner-handihopd.rhcloud.com/)
 
 ## Development
 
