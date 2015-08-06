@@ -15,8 +15,8 @@ deploy:
   user: dave.thompson@across.co.uk
   password:
     secure: ft/tJUQolE9bSKG64Y6ChYNjqA+x3Dl/N5TwqgeH9pi7i1ijxYIQFem4j80gQAyuq4R7xd8jQUlYqGPWmJO14YBBqWSdVC2eTU+LJwNqjeHpyTHH9DN5c/SyEDfJPnqTHUvZkMVvbbR84fKOzE9x6Zbbd7E3j+EfXeFnBkQJ024Df9O7PeoFqLo0y1UwivasIFap/NDpF8WujWsNB704AfUCoCj0pGPuq9In7fm5AFxTUJQCDTz/RIgX9hb9bmaOrAPIBVLl0ciUgU6sqPP/TB3JFKgNuJydsWub2TaXlZowKe+ufhKI/S3cvLwDDV7vXUdJIkjFLgOTN0WNt8QuUolOi8y/AHHKA23Tvq5ZhtnUHwfFxqXDQU6495CYKO9cwnsiPu6zJeBiIbevClHKgEhVFXjj17fLerG2fhxGKOCq1Uzr6PA/MnK5/rHnvJGx2DLZmWYZRvoLZgwZ2L2S0V2BF62G9mH4QIfwiW/ixNtQt83Buxc9PaHpESDjS3L1nFLrqeT7i2Bo5Khnu7ZVUfNFtbjG9b2sl6quhVzSuYD3KAYiEwhVTaIlZPtgYqLfpyf/bhCvDZtzlztAI0D+TJxhw08HVOUF1Hh0yI7a4Rnn14l2QJG80h8ExE/tccwJAt7GXmnE6Xw2eHV9AkCp8cyaoMjtOYHLZYqftYeCxj0=
-  app: nodejs
-  domain: acrosshealth
+  app: provisioner
+  domain: handihopd
   on:
     repo: davet1985/ehrscape-provisioner
   skip_cleanup: true
