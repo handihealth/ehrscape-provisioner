@@ -4,6 +4,7 @@ var sass = require('gulp-sass');
 var watch = require('gulp-watch');
 var copy = require('gulp-copy');
 var karma = require('gulp-karma');
+var angularProtractor = require('gulp-angular-protractor');
 
 var testFiles = [
   './app/bower_components/angular/angular.js',
@@ -21,13 +22,23 @@ var testFiles = [
 ];
 
 gulp.task('test', function() {
-  return gulp.src(testFiles)
+  gulp.src(testFiles)
     .pipe(karma({
       configFile: 'karma.conf.js',
       action: 'run'
     }))
     .on('error', function(err) {
       throw err;
+    });
+  gulp.src(['./e2e-test/*.js'])
+    .pipe(angularProtractor({
+        'configFile': './e2e-test/protractor.conf.js',
+        'args': ['--baseUrl', 'http://127.0.0.1:3000'],
+        'autoStartStopServer': true,
+        'debug': true
+    }))
+    .on('error', function(e) {
+      throw e;
     });
 });
 
