@@ -26,7 +26,7 @@ angular.module('ehrscapeProvisioner.home', ['ngRoute', 'ngQueue'])
 
   $scope.reset = function() {
     $rootScope.ehrscapeConfig = ehrscapeConfig;
-    $scope.actionList = $scope.prepareActionList(Action);
+    $scope.actionList = prepareActionList(Action);
     this.completeActionCount = 0;
   };
 
@@ -46,7 +46,18 @@ angular.module('ehrscapeProvisioner.home', ['ngRoute', 'ngQueue'])
     return $scope.actionList[0].status === 'Complete' || $scope.actionList[0].status === 'Failed';
   }
 
-  $scope.prepareActionList = function(Action) {
+  $scope.generateMarkdownDownloadUrl = function() {
+    var params = $rootScope.ehrscapeConfig;
+    params.fullName = postPartyRequestBody.firstNames + " " + postPartyRequestBody.lastNames;
+    params.nhsNumber = postPartyRequestBody.partyAdditionalInfo[1].value;
+    var url = '/download/workspace-markdown?';
+    for (var item in params) {
+      url += item + '=' + params[item] + '&';
+    }
+    return encodeURI(url);
+  }
+
+  var prepareActionList = function(Action) {
     var actionList = [];
     actionList.push(new Action({
       id: 'LOGIN',

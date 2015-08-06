@@ -37,9 +37,11 @@
       <div ng-show="showTotalProgressAndTime()">
         <div class="small-9 columns">
           <div class="row">
-            <div class="small-12 columns">
-              <span class="total-time">Total time taken: {{getTotalTimeTaken()}} ms</span>
-              <span><a href="#/markdown">View markdown</a></span>
+            <div class="small-6 columns">
+              <span class="total-time">Total time taken: <span class="time-taken">{{getTotalTimeTaken()}}ms</span></span>
+            </div>
+            <div class="small-6 columns text-right">
+              <span><a href="{{generateMarkdownDownloadUrl()}}">Download markdown</a></span>
             </div>
             <div class="small-12 columns">
               <div class="progress">

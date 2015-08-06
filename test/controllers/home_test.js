@@ -84,6 +84,10 @@ describe('ehrscapeProvisioner.home module', function() {
       expect($rootScope.ehrscapeConfig.ehrId).toBe('21e83644-578f-422d-847e-c63919aa5480');
     });
 
+    it('should generate a url to download the workspace markdown', function() {
+      expect($scope.generateMarkdownDownloadUrl()).toBe('/download/workspace-markdown?baseUrl=https://rest.ehrscape.com/rest/v1/&username=test&password=pwd&sessionId=afff6523-1f3c-45f2-8ad1-49bdd5dc6d39&subjectNamespace=uk.nhs.nhsnumber&subjectId=67843&ehrId=21e83644-578f-422d-847e-c63919aa5480&commiterName=ehrscapeProvisioner&fullName=Steve%20Walford&nhsNumber=7430555&');
+    });
+
   });
 
 });
