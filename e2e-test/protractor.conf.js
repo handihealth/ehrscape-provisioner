@@ -9,7 +9,7 @@ exports.config = {
     'browserName': 'chrome'
   },
 
-  baseUrl: 'http://localhost:3000/',
+  baseUrl: 'http://localhost:8080/',
 
   rootElement: '.ng-app',
 
