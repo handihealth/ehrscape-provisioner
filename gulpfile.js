@@ -32,7 +32,7 @@ gulp.task('test', function() {
   gulp.src(['./e2e-test/*.js'])
     .pipe(angularProtractor({
         'configFile': './e2e-test/protractor.conf.js',
-        'args': ['--baseUrl', 'http://127.0.0.1:3000'],
+        'args': ['--baseUrl', 'http://127.0.0.1:8080'],
         'autoStartStopServer': true,
         'debug': true
     }))

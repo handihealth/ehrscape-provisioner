@@ -26,8 +26,8 @@ describe('Ehrscape provisioner app', function() {
   });
 
   it('should load up with default actions and buttons', function() {
-    expect(element.all(by.css('.action-list tbody tr')).count()).toBe(3);
-    expect(element.all(by.css('.request-header')).count()).toBe(3);
+    expect(element.all(by.css('.action-list tbody tr')).count()).toBe(4);
+    expect(element.all(by.css('.request-header')).count()).toBe(4);
     expect(element(by.id('go-button'))).toBeDefined();
     expect(element(by.id('reset-button'))).toBeDefined();
   });
