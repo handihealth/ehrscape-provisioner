@@ -49,7 +49,7 @@ describe('ehrscapeProvisioner.home module', function() {
     username: 'test',
     password: 'pwd',
     sessionId: '1234-5678-abcd-efgh',
-    subjectNamespace: 'uk.nhs.nhsnumber',
+    subjectNamespace: 'uk.nhs.hospital_number',
     subjectId: '12345',
     ehrId: '9876-5432-hijk-lmno',
     commiterName: 'ehrscapeProvisioner'
@@ -71,7 +71,7 @@ describe('ehrscapeProvisioner.home module', function() {
         "version": 0
       },
       {
-        "key": "uk.nhs.nhsnumber",
+        "key": "uk.nhs.hospital_number",
         "value": "7430555",
         "version": 1
       }
@@ -100,7 +100,7 @@ describe('ehrscapeProvisioner.home module', function() {
       expect($rootScope.ehrscapeConfig.username).toBe('test');
       expect($rootScope.ehrscapeConfig.password).toBe('pwd');
       expect($rootScope.ehrscapeConfig.sessionId).toBe('1234-5678-abcd-efgh');
-      expect($rootScope.ehrscapeConfig.subjectNamespace).toBe('uk.nhs.nhsnumber');
+      expect($rootScope.ehrscapeConfig.subjectNamespace).toBe('uk.nhs.hospital_number');
       expect($rootScope.ehrscapeConfig.subjectId).toBe('12345');
       expect($rootScope.ehrscapeConfig.ehrId).toBe('9876-5432-hijk-lmno');
       expect($rootScope.ehrscapeConfig.commiterName).toBe('ehrscapeProvisioner');
@@ -119,7 +119,7 @@ describe('ehrscapeProvisioner.home module', function() {
     });
 
     it('should generate a url to download the workspace markdown', function() {
-      expect($scope.generateMarkdownDownloadUrl()).toBe('/download/workspace-markdown?baseUrl=https://rest.ehrscape.com/rest/v1/&username=test&password=pwd&sessionId=afff6523-1f3c-45f2-8ad1-49bdd5dc6d39&subjectNamespace=uk.nhs.nhsnumber&subjectId=67843&ehrId=21e83644-578f-422d-847e-c63919aa5480&commiterName=ehrscapeProvisioner&fullName=Steve%20Walford&nhsNumber=7430555&');
+      expect($scope.generateMarkdownDownloadUrl()).toBe('/download/workspace-markdown?baseUrl=https://rest.ehrscape.com/rest/v1/&username=test&password=pwd&sessionId=afff6523-1f3c-45f2-8ad1-49bdd5dc6d39&subjectNamespace=uk.nhs.hospital_number&subjectId=67843&ehrId=21e83644-578f-422d-847e-c63919aa5480&commiterName=ehrscapeProvisioner&fullName=Steve%20Walford&nhsNumber=7430555&');
     });
 
   });
