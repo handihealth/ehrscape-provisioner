@@ -2,7 +2,6 @@ var gulp = require('gulp');
 var concat = require('gulp-concat');
 var sass = require('gulp-sass');
 var watch = require('gulp-watch');
-var copy = require('gulp-copy');
 var karma = require('gulp-karma');
 var angularProtractor = require('gulp-angular-protractor');
 
@@ -42,7 +41,7 @@ gulp.task('test', function() {
 });
 
 gulp.task('default', function() {
-  gulp.start('combine-angular', 'sass');
+  gulp.start('combine-angular', 'sass', 'copy-sample-requests');
 });
 
 gulp.task('combine-angular', function() {
@@ -73,6 +72,11 @@ gulp.task('sass', function () {
     .pipe(sass())
     .pipe(concat('style.css'))
     .pipe(gulp.dest('./public/stylesheets'));
+});
+
+gulp.task('copy-sample-requests', function() {
+  gulp.src(['./assets/sample_requests/*.*'])
+    .pipe(gulp.dest('./public/data'));
 });
 
 gulp.task('watch-test', function() {
