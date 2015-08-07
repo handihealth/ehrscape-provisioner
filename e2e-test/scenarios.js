@@ -1,4 +1,5 @@
-// spec.js
+'use strict';
+
 describe('Ehrscape provisioner app', function() {
 
   beforeEach(function() {
@@ -8,21 +9,9 @@ describe('Ehrscape provisioner app', function() {
     }, 30000);
   });
 
-  // it('should have a title', function() {
-  //   browser.get('http://juliemr.github.io/protractor-demo/');
-
-  //   expect(browser.getTitle()).toEqual('Super Calculator');
-  // });
-
   it('should load up with default config', function() {
-    // expect(browser.getTitle()).toEqual('EhrScape provisioner');
-    // expect(element.all(by.css('.request-header')).count()).toBe(3);
-
     expect(element(by.model('ehrscapeConfig.baseUrl')).getAttribute('value')).toBe('https://rest.ehrscape.com/rest/v1/');
     expect(element(by.model('ehrscapeConfig.subjectNamespace')).getAttribute('value')).toBe('uk.nhs.nhsnumber');
-
-    // element(by.id('go-button')).click();
-    // console.log(element(by.css('.sweet-alert.visible h2')).getText());
   });
 
   it('should load up with default actions and buttons', function() {
