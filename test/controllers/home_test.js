@@ -7,12 +7,15 @@ describe('ehrscapeProvisioner.home module', function() {
   var $controller;
   function Action(props) {
     this.id = props.id;
+    this.requestBody = props.requestBody == undefined ? '' : props.requestBody;
+    this.requestBodyDisplay = '';
   };
   Action.prototype.getTimeTaken = function() {
     return 100;
   };
   Action.prototype.performHttpRequest = function(success, failure) {
     var response;
+    this.requestBodyDisplay = this.requestBody;
     if (this.id === 'LOGIN') {
       response = {"sessionId": "afff6523-1f3c-45f2-8ad1-49bdd5dc6d39"};
     }
@@ -33,8 +36,13 @@ describe('ehrscapeProvisioner.home module', function() {
         "ehrId": "21e83644-578f-422d-847e-c63919aa5480"
       };
     }
+    if (this.id === 'CREATE_UPLOAD') {
+      response = {
+        "action": "CREATE",
+      };
+    }
     success(response);
-  }
+  };
 
   var ehrscapeConfig = {
     baseUrl: 'https://rest.ehrscape.com/rest/v1/',
@@ -47,6 +55,32 @@ describe('ehrscapeProvisioner.home module', function() {
     commiterName: 'ehrscapeProvisioner'
   };
 
+  var postPartyRequestBody = {
+    "address": {
+      "address": "60 Florida Gardens, Cardiff, LS23 4RT",
+      "version": 1
+    },
+    "dateOfBirth": "1965-07-12T00:00:00.000Z",
+    "firstNames": "Steve",
+    "gender": "MALE",
+    "lastNames": "Walford",
+    "partyAdditionalInfo": [
+      {
+        "key": "title",
+        "value": "Mr",
+        "version": 0
+      },
+      {
+        "key": "uk.nhs.nhsnumber",
+        "value": "7430555",
+        "version": 1
+      }
+    ],
+    "version": 1
+  };
+
+  var postTemplateRequestBody = "my xml data";
+
   beforeEach(inject(function(_$controller_) {
     $controller = _$controller_;
   }));
@@ -58,7 +92,7 @@ describe('ehrscapeProvisioner.home module', function() {
     beforeEach(function() {
       $rootScope = { ehrscapeConfig: { baseUrl: 'https://rest.ehrscape.com/rest/v1/' } };
       $scope = {};
-      controller = $controller('HomeCtrl', { $rootScope: $rootScope, $scope: $scope, Action: Action, ehrscapeConfig: ehrscapeConfig });
+      controller = $controller('HomeCtrl', { $rootScope: $rootScope, $scope: $scope, Action: Action, ehrscapeConfig: ehrscapeConfig, postPartyRequestBody: postPartyRequestBody, postTemplateRequestBody: postTemplateRequestBody });
     });
 
     it('should add config to root scope', function() {
@@ -78,7 +112,7 @@ describe('ehrscapeProvisioner.home module', function() {
       $scope.start();
       expect($scope.showTotalProgressAndTime()).toBe(false);
       expect($scope.getPercentComplete()).toEqual('100%');
-      expect($scope.getTotalTimeTaken()).toEqual(300);
+      expect($scope.getTotalTimeTaken()).toEqual($scope.actionList.length * 100);
       expect($rootScope.ehrscapeConfig.sessionId).toBe('afff6523-1f3c-45f2-8ad1-49bdd5dc6d39');
       expect($rootScope.ehrscapeConfig.subjectId).toBe('67843');
       expect($rootScope.ehrscapeConfig.ehrId).toBe('21e83644-578f-422d-847e-c63919aa5480');
