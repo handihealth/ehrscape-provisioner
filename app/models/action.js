@@ -35,6 +35,18 @@ angular.module('ehrscapeProvisioner.Action', [])
 
   Action.prototype.performHttpRequest = function(success, failure) {
 
+    var doRequest = function(req) {
+      return $http(req).
+        success(function(data, status, headers, config) {
+          _this.processHttpResponse({status: 'Complete', responseCode: status, responseData: data});
+          success(data);
+        }).
+        error(function(data, status, headers, config) {
+          _this.processHttpResponse({status: 'Failed', responseCode: status, responseData: data});
+          failure(data);
+        });
+    };
+
     this.status = 'Pending';
     this.startTime = Date.now();
     this.endTime = Date.now();
@@ -52,16 +64,7 @@ angular.module('ehrscapeProvisioner.Action', [])
           headers: _this.getHeaders(),
           data: body
         };
-        return $http(req).
-          success(function(data, status, headers, config) {
-            _this.processHttpResponse({status: 'Complete', responseCode: status, responseData: data});
-            success(data);
-          }).
-          error(function(data, status, headers, config) {
-            _this.processHttpResponse({status: 'Failed', responseCode: status, responseData: data});
-            failure(data);
-          });
-
+        doRequest(req);
       });
     } else {
       var req = {
@@ -69,15 +72,7 @@ angular.module('ehrscapeProvisioner.Action', [])
         url: this.getFullUrl(),
         headers: this.getHeaders(),
       };
-      return $http(req).
-        success(function(data, status, headers, config) {
-          _this.processHttpResponse({status: 'Complete', responseCode: status, responseData: data});
-          success(data);
-        }).
-        error(function(data, status, headers, config) {
-          _this.processHttpResponse({status: 'Failed', responseCode: status, responseData: data});
-          failure(data);
-        });
+      doRequest(req);
     }
 
   }

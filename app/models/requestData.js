@@ -6,7 +6,6 @@ angular.module('ehrscapeProvisioner.requestData', [])
 
   return {
     get: function(callback) {
-      console.log('postPartyRequestBody');
       $http.get('/data/party.json').success(function(data) {
         callback(data);
       });
@@ -19,7 +18,6 @@ angular.module('ehrscapeProvisioner.requestData', [])
 
   return {
     get: function(callback) {
-      console.log('postTemplateRequestBody');
       $http.get('/data/vital-signs-template.xml').success(function(data) {
         callback(data);
       });
