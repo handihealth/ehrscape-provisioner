@@ -9,6 +9,8 @@ angular.module('ehrscapeProvisioner.ehrscapeConfig', [])
     username: '',
     password: '',
     sessionId: '',
+    fullName: '',
+    nhsNumber: '',
     subjectNamespace: 'uk.nhs.nhsnumber',
     subjectId: '',
     ehrId: '',

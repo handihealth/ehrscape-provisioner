@@ -6,6 +6,7 @@ angular.module('ehrscapeProvisioner', [
   'ngQueue',
   'ehrscapeProvisioner.home',
   'ehrscapeProvisioner.ehrscapeConfig',
+  'ehrscapeProvisioner.requestData',
   'ehrscapeProvisioner.Action'
 ])
 

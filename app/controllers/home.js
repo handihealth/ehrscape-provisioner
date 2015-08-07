@@ -10,7 +10,7 @@ angular.module('ehrscapeProvisioner.home', ['ngRoute', 'ngQueue'])
     });
 }])
 
-.controller('HomeCtrl', ['$rootScope', '$scope', '$queueFactory', 'ehrscapeConfig', 'Action', function($rootScope, $scope, $queueFactory, ehrscapeConfig, Action) {
+.controller('HomeCtrl', ['$rootScope', '$scope', '$queueFactory', 'ehrscapeConfig', 'Action', 'postPartyRequestBody', 'postTemplateRequestBody', function($rootScope, $scope, $queueFactory, ehrscapeConfig, Action, postPartyRequestBody, postTemplateRequestBody) {
 
   var totalActionCount = 0;
   var completeActionCount = 0;
@@ -48,8 +48,6 @@ angular.module('ehrscapeProvisioner.home', ['ngRoute', 'ngQueue'])
 
   $scope.generateMarkdownDownloadUrl = function() {
     var params = $rootScope.ehrscapeConfig;
-    params.fullName = postPartyRequestBody.firstNames + " " + postPartyRequestBody.lastNames;
-    params.nhsNumber = postPartyRequestBody.partyAdditionalInfo[1].value;
     var url = '/download/workspace-markdown?';
     for (var item in params) {
       url += item + '=' + params[item] + '&';
@@ -76,7 +74,8 @@ angular.module('ehrscapeProvisioner.home', ['ngRoute', 'ngQueue'])
       urlExtension: 'demographics/party',
       requestMethod: 'POST',
       requestHeaders: [{name: 'Content-Type', value: 'application/json'}],
-      requestBody: postPartyRequestBody
+      requestBody: postPartyRequestBody,
+      requestBodyType: 'JSON'
     }));
     actionList.push(new Action({
       id: 'CREATE_EHR',
@@ -88,6 +87,15 @@ angular.module('ehrscapeProvisioner.home', ['ngRoute', 'ngQueue'])
         {name: 'subjectNamespace', config: true},
         {name: 'commiterName', config: true},
       ]
+    }));
+    actionList.push(new Action({
+      id: 'UPLOAD_TEMPLATE',
+      name: 'Upload template',
+      urlExtension: 'template',
+      requestMethod: 'POST',
+      requestHeaders: [{name: 'Content-Type', value: 'application/xml'}],
+      requestBody: postTemplateRequestBody,
+      requestBodyType: 'XML'
     }));
     totalActionCount = actionList.length;
     return actionList;
@@ -107,6 +115,8 @@ angular.module('ehrscapeProvisioner.home', ['ngRoute', 'ngQueue'])
       var subjectId = result.meta.href;
       subjectId = subjectId.substr(subjectId.lastIndexOf('/')+1);
       $rootScope.ehrscapeConfig.subjectId = subjectId;
+      $rootScope.ehrscapeConfig.fullName = currAction.requestBodyDisplay.firstNames + " " + currAction.requestBodyDisplay.lastNames;
+      $rootScope.ehrscapeConfig.nhsNumber = currAction.requestBodyDisplay.partyAdditionalInfo[1].value;
     }
     if (currAction.id === 'CREATE_EHR') {
       $rootScope.ehrscapeConfig.ehrId = result.ehrId;

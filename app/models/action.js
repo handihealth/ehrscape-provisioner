@@ -13,6 +13,8 @@ angular.module('ehrscapeProvisioner.Action', [])
     this.requestMethod = props.requestMethod;
     this.requestHeaders = props.requestHeaders == undefined ? [] : props.requestHeaders;
     this.requestBody = props.requestBody == undefined ? '' : props.requestBody;
+    this.requestBodyDisplay = '';
+    this.requestBodyType = props.requestBodyType == undefined ? '' : props.requestBodyType;
     this.responseCode = '';
     this.responseBody = '';
     this.status = 'Not started';
@@ -32,25 +34,52 @@ angular.module('ehrscapeProvisioner.Action', [])
   }
 
   Action.prototype.performHttpRequest = function(success, failure) {
+
     this.status = 'Pending';
     this.startTime = Date.now();
     this.endTime = Date.now();
     var _this = this;
-    var req = {
-      method: this.requestMethod,
-      url: this.getFullUrl(),
-      headers: this.getHeaders(),
-      data: JSON.stringify(postPartyRequestBody)
-    };
-    return $http(req).
-      success(function(data, status, headers, config) {
-        _this.processHttpResponse({status: 'Complete', responseCode: status, responseData: data});
-        success(data);
-      }).
-      error(function(data, status, headers, config) {
-        _this.processHttpResponse({status: 'Failed', responseCode: status, responseData: data});
-        failure(data);
+
+    if (typeof this.requestBody === "object") {
+      this.requestBody.get(function(body) {
+        _this.requestBodyDisplay = body;
+        if (_this.requestBodyType === 'JSON') {
+          body = JSON.stringify(body);
+        }
+        var req = {
+          method: _this.requestMethod,
+          url: _this.getFullUrl(),
+          headers: _this.getHeaders(),
+          data: body
+        };
+        return $http(req).
+          success(function(data, status, headers, config) {
+            _this.processHttpResponse({status: 'Complete', responseCode: status, responseData: data});
+            success(data);
+          }).
+          error(function(data, status, headers, config) {
+            _this.processHttpResponse({status: 'Failed', responseCode: status, responseData: data});
+            failure(data);
+          });
+
       });
+    } else {
+      var req = {
+        method: this.requestMethod,
+        url: this.getFullUrl(),
+        headers: this.getHeaders(),
+      };
+      return $http(req).
+        success(function(data, status, headers, config) {
+          _this.processHttpResponse({status: 'Complete', responseCode: status, responseData: data});
+          success(data);
+        }).
+        error(function(data, status, headers, config) {
+          _this.processHttpResponse({status: 'Failed', responseCode: status, responseData: data});
+          failure(data);
+        });
+    }
+
   }
 
   Action.prototype.getFullUrl = function() {
@@ -106,10 +135,12 @@ angular.module('ehrscapeProvisioner.Action', [])
   }
 
   Action.prototype.getFormattedRequestBody = function() {
-    if (this.requestBody.length === 0) {
+    if (this.requestBodyDisplay.length === 0) {
       return '';
+    } else if (this.requestBodyType === 'JSON') {
+      return JSON.stringify(this.requestBodyDisplay, null, 2);
     } else {
-      return JSON.stringify(this.requestBody, null, 2);
+      return this.requestBodyDisplay;
     }
   }
 
