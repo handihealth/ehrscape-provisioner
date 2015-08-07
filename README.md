@@ -6,6 +6,30 @@ This app is built and deployed by Travis CI to Openshift, the resulting deploy c
 
 ## Development
 
+### Docker
+
+These instructions assume you have docker installed and running
+
+To run locally using docker run
+
+```
+docker run -v ${PWD}:/src -it -p 3000:8080 davet1985/ehrscape-provisioner
+```
+
+To run using nodemon, to watch for file changes and automatically restart the server, use
+
+```
+docker run -v ${PWD}:/src -it -p 3000:8080 davet1985/ehrscape-provisioner nodemon /src/bin/www
+```
+
+If you need to rebuild the image, use
+
+```
+docker build -t davet1985/ehrscape-provisioner .
+```
+
+### Local
+
 To run locally for development ensure you have the following installed.
 
 * node.js, we are using version 0.10
@@ -27,7 +51,7 @@ npm install -g gulp
 npm install -g bower
 ```
 
-From here you should be able to run `npm start` and it will download all the necessary node modules, bower components and gulp will do it's thing and the server should be running on http://localhost:3000.
+From here you should be able to run `npm start` and it will download all the necessary node modules, bower components and gulp will do it's thing and the server should be running on http://localhost:8080.
 
 ## Development Options
 
