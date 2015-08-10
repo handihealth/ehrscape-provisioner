@@ -80,6 +80,7 @@ describe('ehrscapeProvisioner.home module', function() {
   };
 
   var postTemplateRequestBody = "my xml data";
+  var postCompositionRequestBody = "my xml data";
 
   beforeEach(inject(function(_$controller_) {
     $controller = _$controller_;
@@ -92,7 +93,18 @@ describe('ehrscapeProvisioner.home module', function() {
     beforeEach(function() {
       $rootScope = { ehrscapeConfig: { baseUrl: 'https://rest.ehrscape.com/rest/v1/' } };
       $scope = {};
-      controller = $controller('HomeCtrl', { $rootScope: $rootScope, $scope: $scope, Action: Action, ehrscapeConfig: ehrscapeConfig, postPartyRequestBody: postPartyRequestBody, postTemplateRequestBody: postTemplateRequestBody });
+      controller = $controller('HomeCtrl', { $rootScope: $rootScope, $scope: $scope, Action: Action, ehrscapeConfig: ehrscapeConfig, postPartyRequestBody: postPartyRequestBody, postTemplateRequestBody: postTemplateRequestBody, postCompositionRequestBody: postCompositionRequestBody });
+      $scope.queueFollowingActionHttpRequests = function() {
+        for (var i = 1; i < $scope.actionList.length; i++) {
+          var currAction = $scope.actionList[i];
+          currAction.performHttpRequest(function(result) {
+              $scope.postPerformHttpRequest(currAction, result);
+            }, function(result) {
+              $scope.postPerformHttpRequest(currAction, result);
+            }
+          );
+        }
+      }
     });
 
     it('should add config to root scope', function() {

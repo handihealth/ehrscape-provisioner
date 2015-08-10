@@ -10,7 +10,7 @@ angular.module('ehrscapeProvisioner.home', ['ngRoute', 'ngQueue'])
     });
 }])
 
-.controller('HomeCtrl', ['$rootScope', '$scope', '$queueFactory', 'ehrscapeConfig', 'Action', 'postPartyRequestBody', 'postTemplateRequestBody', function($rootScope, $scope, $queueFactory, ehrscapeConfig, Action, postPartyRequestBody, postTemplateRequestBody) {
+.controller('HomeCtrl', ['$rootScope', '$scope', '$q', '$timeout', 'ehrscapeConfig', 'Action', 'postPartyRequestBody', 'postTemplateRequestBody', 'postCompositionRequestBody', function($rootScope, $scope, $q, $timeout, ehrscapeConfig, Action, postPartyRequestBody, postTemplateRequestBody, postCompositionRequestBody) {
 
   var totalActionCount = 0;
   var completeActionCount = 0;
@@ -97,6 +97,21 @@ angular.module('ehrscapeProvisioner.home', ['ngRoute', 'ngQueue'])
       requestBody: postTemplateRequestBody,
       requestBodyType: 'XML'
     }));
+    actionList.push(new Action({
+      id: 'UPLOAD_COMPOSITION',
+      name: 'Upload composition',
+      urlExtension: 'composition',
+      requestMethod: 'POST',
+      requestHeaders: [{name: 'Content-Type', value: 'application/json'}],
+      requestBody: postCompositionRequestBody,
+      requestBodyType: 'JSON',
+      urlParams: [
+        {name: 'ehrId', config: true},
+        {name: 'templateId', config: false, value: 'Vital Signs Encounter (Composition)'},
+        {name: 'format', config: false, value: 'FLAT'},
+        {name: 'commiterName', config: true},
+      ]
+    }));
     totalActionCount = actionList.length;
     return actionList;
   };
@@ -105,11 +120,11 @@ angular.module('ehrscapeProvisioner.home', ['ngRoute', 'ngQueue'])
     $scope.reset();
   }
 
-  var postPerformHttpRequest = function(currAction, result) {
+  $scope.postPerformHttpRequest = function(currAction, result) {
     completeActionCount++;
     if (currAction.id === 'LOGIN') {
       $rootScope.ehrscapeConfig.sessionId = result.sessionId;
-      queueFollowingActionHttpRequests();
+      $scope.queueFollowingActionHttpRequests();
     }
     if (currAction.id === 'CREATE_PATIENT') {
       var subjectId = result.meta.href;
@@ -123,25 +138,34 @@ angular.module('ehrscapeProvisioner.home', ['ngRoute', 'ngQueue'])
     }
   }
 
-  var queueFollowingActionHttpRequests = function() {
-    var queue = $queueFactory($scope.actionList.length-1);
-    for (var i = 1; i < $scope.actionList.length; i++) {
-      queue.enqueue(function () {
-        var currAction = $scope.actionList[i];
-        return currAction.performHttpRequest(function(result) {
-            postPerformHttpRequest(currAction, result);
+  $scope.queueFollowingActionHttpRequests = function() {
+
+    function createPromise(name, delayIncrement, currAction) {
+      var deferred = $q.defer();
+      $timeout(function() {
+        currAction.performHttpRequest(function(result) {
+            $scope.postPerformHttpRequest(currAction, result);
+            deferred.resolve(name);
           }, function(result) {
-            postPerformHttpRequest(currAction, result);
+            $scope.postPerformHttpRequest(currAction, result);
+            deferred.reject(name);
           }
         );
-      });
+      }, delayIncrement * 2000);
+      return deferred.promise;
     }
+
+    var promises = [];
+    for (var i = 1; i < $scope.actionList.length; i++) {
+      promises.push(createPromise($scope.actionList[i].id, i, $scope.actionList[i]));
+    }
+    $q.all(promises);
   }
 
   var processActionHttpRequests = function() {
     var loginAction = $scope.actionList[0];
     loginAction.performHttpRequest(function(result) {
-      postPerformHttpRequest(loginAction, result);
+      $scope.postPerformHttpRequest(loginAction, result);
     }, function(result) {
       if ($rootScope.ehrscapeConfig.sessionId === '') {
         swal('Error', 'Authentication failed, please check the username and password.');
