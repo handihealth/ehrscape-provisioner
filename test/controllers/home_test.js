@@ -41,6 +41,11 @@ describe('ehrscapeProvisioner.home module', function() {
         "action": "CREATE",
       };
     }
+    if (this.id === 'UPLOAD_COMPOSITION') {
+      response = {
+        "compositionUid": "d34fd858-7953-4049-99f6-b5f4fb03008e::test.org.ehrscape.com::1",
+      };
+    }
     success(response);
   };
 
@@ -52,6 +57,8 @@ describe('ehrscapeProvisioner.home module', function() {
     subjectNamespace: 'uk.nhs.hospital_number',
     subjectId: '12345',
     ehrId: '9876-5432-hijk-lmno',
+    templateId: 'Template name test',
+    compositionId: '9876-5432-hijk-lmno:1234',
     commiterName: 'ehrscapeProvisioner'
   };
 
@@ -115,6 +122,8 @@ describe('ehrscapeProvisioner.home module', function() {
       expect($rootScope.ehrscapeConfig.subjectNamespace).toBe('uk.nhs.hospital_number');
       expect($rootScope.ehrscapeConfig.subjectId).toBe('12345');
       expect($rootScope.ehrscapeConfig.ehrId).toBe('9876-5432-hijk-lmno');
+      expect($rootScope.ehrscapeConfig.templateId).toBe('Template name test');
+      expect($rootScope.ehrscapeConfig.compositionId).toBe('9876-5432-hijk-lmno:1234');
       expect($rootScope.ehrscapeConfig.commiterName).toBe('ehrscapeProvisioner');
     });
 
@@ -128,10 +137,11 @@ describe('ehrscapeProvisioner.home module', function() {
       expect($rootScope.ehrscapeConfig.sessionId).toBe('afff6523-1f3c-45f2-8ad1-49bdd5dc6d39');
       expect($rootScope.ehrscapeConfig.subjectId).toBe('67843');
       expect($rootScope.ehrscapeConfig.ehrId).toBe('21e83644-578f-422d-847e-c63919aa5480');
+      expect($rootScope.ehrscapeConfig.compositionId).toBe('d34fd858-7953-4049-99f6-b5f4fb03008e::test.org.ehrscape.com::1');
     });
 
     it('should generate a url to download the workspace markdown', function() {
-      expect($scope.generateMarkdownDownloadUrl()).toBe('/download/workspace-markdown?baseUrl=https://rest.ehrscape.com/rest/v1/&username=test&password=pwd&sessionId=afff6523-1f3c-45f2-8ad1-49bdd5dc6d39&subjectNamespace=uk.nhs.hospital_number&subjectId=67843&ehrId=21e83644-578f-422d-847e-c63919aa5480&commiterName=ehrscapeProvisioner&fullName=Steve%20Walford&nhsNumber=7430555&');
+      expect($scope.generateMarkdownDownloadUrl()).toBe('/download/workspace-markdown?baseUrl=https://rest.ehrscape.com/rest/v1/&username=test&password=pwd&sessionId=afff6523-1f3c-45f2-8ad1-49bdd5dc6d39&subjectNamespace=uk.nhs.hospital_number&subjectId=67843&ehrId=21e83644-578f-422d-847e-c63919aa5480&templateId=Template%20name%20test&compositionId=d34fd858-7953-4049-99f6-b5f4fb03008e::test.org.ehrscape.com::1&commiterName=ehrscapeProvisioner&fullName=Steve%20Walford&nhsNumber=7430555&');
     });
 
   });
