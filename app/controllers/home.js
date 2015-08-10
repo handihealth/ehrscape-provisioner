@@ -136,6 +136,9 @@ angular.module('ehrscapeProvisioner.home', ['ngRoute'])
     if (currAction.id === 'CREATE_EHR') {
       $rootScope.ehrscapeConfig.ehrId = result.ehrId;
     }
+    if (currAction.id === 'UPLOAD_COMPOSITION') {
+      $rootScope.ehrscapeConfig.compositionId = result.compositionUid;
+    }
   }
 
   $scope.queueFollowingActionHttpRequests = function() {
@@ -167,6 +170,7 @@ angular.module('ehrscapeProvisioner.home', ['ngRoute'])
     loginAction.performHttpRequest(function(result) {
       $scope.postPerformHttpRequest(loginAction, result);
     }, function(result) {
+      completeActionCount++;
       if ($rootScope.ehrscapeConfig.sessionId === '') {
         swal('Error', 'Authentication failed, please check the username and password.');
         return;

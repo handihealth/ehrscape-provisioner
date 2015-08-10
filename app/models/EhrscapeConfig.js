@@ -14,6 +14,8 @@ angular.module('ehrscapeProvisioner.ehrscapeConfig', [])
     subjectNamespace: 'uk.nhs.hospital_number',
     subjectId: '',
     ehrId: '',
+    templateId: 'Vital Signs Encounter (Composition)',
+    compositionId: '',
     commiterName: 'ehrscapeProvisioner'
   }
 
