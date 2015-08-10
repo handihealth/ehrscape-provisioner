@@ -24,4 +24,16 @@ angular.module('ehrscapeProvisioner.requestData', [])
     }
   };
 
+})
+
+.factory('postCompositionRequestBody', function($http) {
+
+  return {
+    get: function(callback) {
+      $http.get('/data/vital-signs-composition.json').success(function(data) {
+        callback(data);
+      });
+    }
+  };
+
 });
