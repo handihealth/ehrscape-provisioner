@@ -3,7 +3,6 @@
 // Declare app level module which depends on views, and components
 angular.module('ehrscapeProvisioner', [
   'ngRoute',
-  'ngQueue',
   'ehrscapeProvisioner.home',
   'ehrscapeProvisioner.ehrscapeConfig',
   'ehrscapeProvisioner.requestData',

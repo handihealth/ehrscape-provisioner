@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('ehrscapeProvisioner.home', ['ngRoute', 'ngQueue'])
+angular.module('ehrscapeProvisioner.home', ['ngRoute'])
 
 .config(['$routeProvider', function($routeProvider) {
   $routeProvider
