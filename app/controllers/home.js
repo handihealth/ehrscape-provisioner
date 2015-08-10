@@ -154,7 +154,7 @@ angular.module('ehrscapeProvisioner.home', ['ngRoute'])
             deferred.reject(name);
           }
         );
-      }, delayIncrement * 2000);
+      }, delayIncrement * 2300);
       return deferred.promise;
     }
 
