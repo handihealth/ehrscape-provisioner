@@ -18,5 +18,5 @@ deploy:
   app: provisioner
   domain: handihopd
   on:
-    repo: davet1985/ehrscape-provisioner
+    repo: handihealth/ehrscape-provisioner
   skip_cleanup: true
