@@ -56,43 +56,43 @@
   <div class="small-4 columns config-box">
     <div class="row">
       <div class="small-6 columns">
-        <input type="text" id="ehrscapeUsername" name="ehrscapeUsername" ng-model="ehrscapeConfig.username" value="{{ehrscapeConfig.username}}" placeholder="Username"/>
+        <input type="text" id="ehrscapeUsername" name="ehrscapeUsername" ng-model="ehrscapeConfig.username" placeholder="Username"/>
       </div>
       <div class="small-6 columns">
-        <input type="text" id="ehrscapePassword" name="ehrscapePassword" ng-model="ehrscapeConfig.password" value="{{ehrscapeConfig.password}}" placeholder="Password"/>
+        <input type="text" id="ehrscapePassword" name="ehrscapePassword" ng-model="ehrscapeConfig.password" placeholder="Password"/>
       </div>
     </div>
     <div class="row">
       <div class="small-12 columns">
-        <input type="text" disabled="true" id="ehrscapeBaseUrl" name="ehrscapeBaseUrl" ng-model="ehrscapeConfig.baseUrl" value="{{ehrscapeConfig.baseUrl}}"/>
+        <input type="text" ng-readonly="disableBaseUrl" id="ehrscapeBaseUrl" name="ehrscapeBaseUrl" ng-dblclick="switchDisableBaseUrl()" ng-blur="switchDisableBaseUrl()" ng-model="ehrscapeConfig.baseUrl"/>
       </div>
     </div>
     <div class="row">
       <div class="small-12 columns">
-        <input type="text" disabled="true" id="ehrscapeSessionId" name="ehrscapeSessionId" ng-model="ehrscapeConfig.sessionId" value="{{ehrscapeConfig.sessionId}}" placeholder="Session ID"/>
+        <input type="text" disabled="true" id="ehrscapeSessionId" name="ehrscapeSessionId" ng-model="ehrscapeConfig.sessionId" placeholder="Session ID"/>
       </div>
     </div>
     <div class="row">
       <div class="small-6 columns">
-        <input type="text" disabled="true" id="ehrscapeSubjectNamespace" name="ehrscapeSubjectNamespace" ng-model="ehrscapeConfig.subjectNamespace" value="{{ehrscapeConfig.subjectNamespace}}" placeholder="Subject namespace"/>
+        <input type="text" disabled="true" id="ehrscapeSubjectNamespace" name="ehrscapeSubjectNamespace" ng-model="ehrscapeConfig.subjectNamespace" placeholder="Subject namespace"/>
       </div>
       <div class="small-6 columns">
-        <input type="text" disabled="true" id="ehrscapeSubjectId" name="ehrscapeSubjectId" ng-model="ehrscapeConfig.subjectId" value="{{ehrscapeConfig.subjectId}}" placeholder="Subject ID"/>
+        <input type="text" disabled="true" id="ehrscapeSubjectId" name="ehrscapeSubjectId" ng-model="ehrscapeConfig.subjectId" placeholder="Subject ID"/>
       </div>
     </div>
     <div class="row">
       <div class="small-12 columns">
-        <input type="text" disabled="true" id="ehrscapeEhrId" name="ehrscapeEhrId" ng-model="ehrscapeConfig.ehrId" value="{{ehrscapeConfig.ehrId}}" placeholder="EHR ID"/>
+        <input type="text" disabled="true" id="ehrscapeEhrId" name="ehrscapeEhrId" ng-model="ehrscapeConfig.ehrId" placeholder="EHR ID"/>
       </div>
     </div>
     <div class="row">
       <div class="small-12 columns">
-        <input type="text" disabled="true" id="ehrscapeTemplateId" name="ehrscapeTemplateId" ng-model="ehrscapeConfig.templateId" value="{{ehrscapeConfig.templateId}}" placeholder="Template ID"/>
+        <input type="text" disabled="true" id="ehrscapeTemplateId" name="ehrscapeTemplateId" ng-model="ehrscapeConfig.templateId" placeholder="Template ID"/>
       </div>
     </div>
     <div class="row">
       <div class="small-12 columns">
-        <input type="text" disabled="true" id="ehrscapeCompositionId" name="ehrscapeCompositionId" ng-model="ehrscapeConfig.compositionId" value="{{ehrscapeConfig.compositionId}}" placeholder="Composition ID"/>
+        <input type="text" disabled="true" id="ehrscapeCompositionId" name="ehrscapeCompositionId" ng-model="ehrscapeConfig.compositionId" placeholder="Composition ID"/>
       </div>
     </div>
   </div>

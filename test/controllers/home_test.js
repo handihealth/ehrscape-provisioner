@@ -114,6 +114,12 @@ describe('ehrscapeProvisioner.home module', function() {
       }
     });
 
+    it('should allow switching of disableBaseUrl', function() {
+      expect($scope.disableBaseUrl).toBe(true);
+      $scope.switchDisableBaseUrl();
+      expect($scope.disableBaseUrl).toBe(false);
+    });
+
     it('should add config to root scope', function() {
       expect($rootScope.ehrscapeConfig.baseUrl).toBe('https://rest.ehrscape.com/rest/v1/');
       expect($rootScope.ehrscapeConfig.username).toBe('test');

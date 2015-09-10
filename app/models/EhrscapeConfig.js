@@ -5,7 +5,7 @@ angular.module('ehrscapeProvisioner.ehrscapeConfig', [])
 .factory('ehrscapeConfig', function() {
 
   return {
-    baseUrl: 'https://rest.ehrscape.com/rest/v1/',
+    baseUrl: 'https://ehrscape.code-4-health.org/rest/v1/',
     username: '',
     password: '',
     sessionId: '',

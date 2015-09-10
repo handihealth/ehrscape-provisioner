@@ -15,6 +15,12 @@ angular.module('ehrscapeProvisioner.home', ['ngRoute'])
   var totalActionCount = 0;
   var completeActionCount = 0;
 
+  $scope.disableBaseUrl = true;
+
+  $scope.switchDisableBaseUrl = function() {
+    $scope.disableBaseUrl = !$scope.disableBaseUrl;
+  };
+
   $scope.start = function() {
     completeActionCount = 0;
     if ($rootScope.ehrscapeConfig.username.length === 0 || $rootScope.ehrscapeConfig.password.length === 0) {
