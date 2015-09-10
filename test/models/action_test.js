@@ -120,6 +120,11 @@ describe('ehrscapeProvisioner.Action module', function() {
       expect(myAction.constructUrlParameters()).toBe('?param1=value1&param2=value2');
     });
 
+    it('should construct encoded parameters for URL', function() {
+      myAction.setUrlParameters([{name: 'password', value: 'abcd#1234'}]);
+      expect(myAction.constructUrlParameters()).toBe('?password=abcd%231234');
+    });
+
     it('should not construct anything when parameters are not set', function() {
       myAction.setUrlParameters([]); 
       expect(myAction.constructUrlParameters()).toBe('');
