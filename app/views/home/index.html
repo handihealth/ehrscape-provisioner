@@ -22,7 +22,7 @@
             <tr ng-repeat="actionItem in actionList">
               <td>{{actionItem.name}}</td>
               <td>{{actionItem.requestMethod}}</td>
-              <td>{{actionItem.getFullUrl()}}</td>
+              <td>{{actionItem.getFullUrl(true)}}</td>
               <td>{{actionItem.status}}</td>
             </tr>
           </tbody>

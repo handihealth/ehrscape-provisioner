@@ -75,7 +75,7 @@ describe('ehrscapeProvisioner.Action module', function() {
   });
 
   it('should have a full URL without parameters', function() {
-    expect(myAction.getFullUrl()).toBe('https://rest.ehrscape.com/rest/v1/test-extension');
+    expect(myAction.getFullUrl(false)).toBe('https://rest.ehrscape.com/rest/v1/test-extension');
   });
 
   it('should show results relative to status', function() {
@@ -117,21 +117,29 @@ describe('ehrscapeProvisioner.Action module', function() {
     });
 
     it('should construct parameters for URL', function() {
-      expect(myAction.constructUrlParameters()).toBe('?param1=value1&param2=value2');
+      expect(myAction.constructUrlParameters(false)).toBe('?param1=value1&param2=value2');
+    });
+
+    it('should construct parameters with line breaks for URL', function() {
+      expect(myAction.constructUrlParameters(true)).toBe('?param1=value1&\nparam2=value2');
     });
 
     it('should construct encoded parameters for URL', function() {
       myAction.setUrlParameters([{name: 'password', value: 'abcd#1234'}]);
-      expect(myAction.constructUrlParameters()).toBe('?password=abcd%231234');
+      expect(myAction.constructUrlParameters(false)).toBe('?password=abcd%231234');
     });
 
     it('should not construct anything when parameters are not set', function() {
       myAction.setUrlParameters([]); 
-      expect(myAction.constructUrlParameters()).toBe('');
+      expect(myAction.constructUrlParameters(false)).toBe('');
     });
 
     it('should have a full URL including parameters', function() {
       expect(myAction.getFullUrl()).toBe('https://rest.ehrscape.com/rest/v1/test-extension?param1=value1&param2=value2');
+    });
+
+    it('should have a full URL including parameters with line breaks', function() {
+      expect(myAction.getFullUrl(true)).toBe('https://rest.ehrscape.com/rest/v1/test-extension?param1=value1&\nparam2=value2');
     });
 
   });

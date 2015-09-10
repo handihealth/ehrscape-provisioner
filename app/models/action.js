@@ -60,7 +60,7 @@ angular.module('ehrscapeProvisioner.Action', [])
         }
         var req = {
           method: _this.requestMethod,
-          url: _this.getFullUrl(),
+          url: _this.getFullUrl(false),
           headers: _this.getHeaders(),
           data: body
         };
@@ -69,7 +69,7 @@ angular.module('ehrscapeProvisioner.Action', [])
     } else {
       var req = {
         method: this.requestMethod,
-        url: this.getFullUrl(),
+        url: this.getFullUrl(false),
         headers: this.getHeaders(),
       };
       doRequest(req);
@@ -77,11 +77,11 @@ angular.module('ehrscapeProvisioner.Action', [])
 
   }
 
-  Action.prototype.getFullUrl = function() {
-    return $rootScope.ehrscapeConfig.baseUrl + this.urlExtension + this.constructUrlParameters();
+  Action.prototype.getFullUrl = function(addLineBreaks) {
+    return $rootScope.ehrscapeConfig.baseUrl + this.urlExtension + this.constructUrlParameters(addLineBreaks);
   }
 
-  Action.prototype.constructUrlParameters = function() {
+  Action.prototype.constructUrlParameters = function(addLineBreaks) {
     var paramString = '';
     if (this.urlParams.length > 0) {
       paramString += '?';
@@ -94,6 +94,9 @@ angular.module('ehrscapeProvisioner.Action', [])
       }
       if (i < this.urlParams.length-1) {
         paramString += '&';
+        if (addLineBreaks) {
+          paramString += '\n';
+        }
       }
     }
     return paramString;
