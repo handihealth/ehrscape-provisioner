@@ -5,7 +5,7 @@ angular.module('ehrscapeProvisioner')
 .directive('action', function () {
 
   return {
-    templateUrl: '/app/views/home/partials/action.html',
+    templateUrl: '/views/home/partials/action.html',
   }
 
 });

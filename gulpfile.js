@@ -6,14 +6,14 @@ var karma = require('gulp-karma');
 var angularProtractor = require('gulp-angular-protractor');
 
 var testFiles = [
-  './app/bower_components/angular/angular.js',
-  './app/bower_components/angular-route/angular-route.js',
-  './app/bower_components/angular-mocks/angular-mocks.js',
-  './app/bower_components/sweetalert/dist/sweetalert.min.js',
-  './app/app.js',
-  './app/controllers/*.js',
-  './app/directives/*.js',
-  './app/models/*.js',
+  './bower_components/angular/angular.js',
+  './bower_components/angular-route/angular-route.js',
+  './bower_components/angular-mocks/angular-mocks.js',
+  './bower_components/sweetalert/dist/sweetalert.min.js',
+  './src/angular/app.js',
+  './src/angular/controllers/*.js',
+  './src/angular/directives/*.js',
+  './src/angular/models/*.js',
   './test/controllers/*.js',
   './test/models/*.js',
 ];
@@ -45,16 +45,16 @@ gulp.task('default', function() {
 
 gulp.task('combine-angular', function() {
   return gulp.src([
-      './app/bower_components/jquery/dist/jquery.min.js',
-      './app/bower_components/foundation/js/vendor/modernizr.js',
-      './app/bower_components/foundation/js/foundation.min.js',
-      './app/bower_components/sweetalert/dist/sweetalert.min.js',
-      './app/bower_components/angular/angular.min.js',
-      './app/bower_components/angular-route/angular-route.min.js',
-      './app/app.js',
-      './app/models/*.js',
-      './app/controllers/*.js',
-      './app/directives/*.js',
+      './bower_components/jquery/dist/jquery.min.js',
+      './bower_components/foundation/js/vendor/modernizr.js',
+      './bower_components/foundation/js/foundation.min.js',
+      './bower_components/sweetalert/dist/sweetalert.min.js',
+      './bower_components/angular/angular.min.js',
+      './bower_components/angular-route/angular-route.min.js',
+      './src/angular/app.js',
+      './src/angular/models/*.js',
+      './src/angular/controllers/*.js',
+      './src/angular/directives/*.js',
     ])
     .pipe(concat('app.js'))
     .pipe(gulp.dest('./public/javascripts'));
@@ -62,10 +62,10 @@ gulp.task('combine-angular', function() {
 
 gulp.task('sass', function () {
   gulp.src([
-      './app/bower_components/foundation/scss/normalize.scss',
-      './app/bower_components/foundation/scss/foundation.scss',
-      './app/bower_components/sweetalert/dist/sweetalert.css',
-      './assets/stylesheets/style.scss'
+      './bower_components/foundation/scss/normalize.scss',
+      './bower_components/foundation/scss/foundation.scss',
+      './bower_components/sweetalert/dist/sweetalert.css',
+      './src/assets/stylesheets/style.scss'
     ])
     .pipe(sass())
     .pipe(concat('style.css'))
@@ -73,7 +73,7 @@ gulp.task('sass', function () {
 });
 
 gulp.task('copy-sample-requests', function() {
-  gulp.src(['./assets/sample_requests/*.*'])
+  gulp.src(['./src/assets/sample_requests/*.*'])
     .pipe(gulp.dest('./public/data'));
 });
 
@@ -86,8 +86,8 @@ gulp.task('watch-test', function() {
 });
 
 gulp.task('watch', function() {
-  gulp.watch('./assets/stylesheets/*.scss', ['sass']);
-  gulp.watch(['./app/*.js', './app/*/*.js'], ['combine-angular']);
+  gulp.watch('./src/assets/stylesheets/*.scss', ['sass']);
+  gulp.watch(['./src/angular/*.js', './app/*/*.js'], ['combine-angular']);
   gulp.src(testFiles)
     .pipe(karma({
       configFile: 'karma.conf.js',
