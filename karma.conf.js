@@ -7,7 +7,6 @@ module.exports = function(config){
       'bower_components/angular/angular.js',
       'bower_components/angular-route/angular-route.js',
       'bower_components/angular-mocks/angular-mocks.js',
-      'bower_components/ngQueue/ngQueue.js',
       'bower_components/sweetalert/dist/sweetalert.min.js',
       'src/angular/app.js',
       'src/angular/controllers/*.js',
