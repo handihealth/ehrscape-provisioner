@@ -15,24 +15,26 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/openshift/origin-server"
+    "url": "https://github.com/handihealth/ehrscape-provisioner"
   },
   "engines": {
     "node": ">= 0.6.0",
     "npm": ">= 1.0.0"
   },
   "dependencies": {
+    "async": "^1.5.0",
     "body-parser": "~1.12.0",
     "bower": "^1.3.1",
     "cookie-parser": "~1.3.4",
     "debug": "~2.1.1",
     "express": "~4.12.2",
-    "jade": "~1.9.2",
-    "morgan": "~1.5.1",
-    "serve-favicon": "~2.2.0",
     "gulp": "^3.8.11",
     "gulp-concat": "^2.5.2",
-    "gulp-sass": "^1.3.3"
+    "gulp-sass": "^1.3.3",
+    "jade": "~1.9.2",
+    "morgan": "~1.5.1",
+    "request": "^2.65.0",
+    "serve-favicon": "~2.2.0"
   },
   "devDependencies": {
     "gulp-angular-protractor": "0.0.2",
