@@ -5,6 +5,7 @@ var async = require('async');
 var router = express.Router();
 
 var EhrscapeConfig = require('../models/ehrscapeConfig');
+var EhrscapeRequest = require('../models/ehrscapeRequest');
 
 router.post('/provision', function(req, res, next) {
 
@@ -14,103 +15,80 @@ router.post('/provision', function(req, res, next) {
     EhrscapeConfig.baseUrl = req.body.baseUrl;
   }
 
-  async.series([getSession, createPatient, createEhr, uploadTemplate, uploadComposition], function() {
-    res.json(EhrscapeConfig);
+  async.series([getSession, createPatient, createEhr, uploadTemplate, uploadComposition], function(err, results) {
+    res.json({ requests: results, config: EhrscapeConfig });
   });
 
+  function doRequest(desc, options, showRequestBody, onResponse, callback) {
+    var startDate = Date.now();
+    request.post(options, function(error, response, body) {
+      var timeTaken = Date.now() - startDate;
+      onResponse(body);
+      var reqBody = showRequestBody ? options.body : '';
+      var ehrscapeRequest = new EhrscapeRequest({ description: desc, url: response.request.href, method: response.request.method, requestBody: reqBody, timeTaken: timeTaken+'ms', responseBody: body, statusCode: response.statusCode });
+      callback(null, ehrscapeRequest);
+    });
+  }
+
   function getSession(callback) {
-    console.log('1');
     var options = {
       url: EhrscapeConfig.baseUrl + 'session',
-      qs: {
-        "username": EhrscapeConfig.username,
-        "password": EhrscapeConfig.password
-      }
+      qs: { "username": EhrscapeConfig.username, "password": EhrscapeConfig.password }
     };
-    request.post(options, function(error, response, body) {
+    doRequest("Create session", options, true, function(body) {
       var body = JSON.parse(body);
       EhrscapeConfig.sessionId = body.sessionId;
-      callback(null, 'one');
-    });
+    }, callback);
   }
 
   function createPatient(callback) {
-    console.log('2');
     var postPartyBody = fs.readFileSync('src/assets/sample_requests/party.json', 'utf8');
     var options = {
       url: EhrscapeConfig.baseUrl + 'demographics/party',
-      headers: {
-        'Ehr-Session': EhrscapeConfig.sessionId,
-        'Content-Type': 'application/json'
-      },
+      headers: { 'Ehr-Session': EhrscapeConfig.sessionId, 'Content-Type': 'application/json' },
       body: postPartyBody
     };
-    request.post(options, function(error, response, body) {
+    doRequest("Create patient", options, true, function(body) {
       var body = JSON.parse(body);
       var subjectId = body.meta.href;
-      subjectId = subjectId.substr(subjectId.lastIndexOf('/')+1);
-      EhrscapeConfig.subjectId = subjectId;
-      callback(null, 'two');
-    });
+      EhrscapeConfig.subjectId = subjectId.substr(subjectId.lastIndexOf('/')+1);
+    }, callback);
   }
 
   function createEhr(callback) {
-    console.log('3');
     var options = {
       url: EhrscapeConfig.baseUrl + 'ehr',
-      headers: {
-        'Ehr-Session': EhrscapeConfig.sessionId
-      },
-      qs: {
-        "subjectId": EhrscapeConfig.subjectId,
-        "subjectNamespace": EhrscapeConfig.subjectNamespace,
-        "commiterName": EhrscapeConfig.commiterName
-      }
+      headers: { 'Ehr-Session': EhrscapeConfig.sessionId },
+      qs: { "subjectId": EhrscapeConfig.subjectId, "subjectNamespace": EhrscapeConfig.subjectNamespace, "commiterName": EhrscapeConfig.commiterName }
     };
-    request.post(options, function(error, response, body) {
+    doRequest("Create EHR", options, true, function(body) {
       var body = JSON.parse(body);
       EhrscapeConfig.ehrId = body.ehrId;
-      callback(null, 'three');
-    });
+    }, callback);
   }
 
   function uploadTemplate(callback) {
-    console.log('4');
     var postTemplateBody = fs.readFileSync('src/assets/sample_requests/vital-signs-template.xml', 'utf8');
     var options = {
       url: EhrscapeConfig.baseUrl + 'template',
-      headers: {
-        'Ehr-Session': EhrscapeConfig.sessionId
-      },
+      headers: { 'Ehr-Session': EhrscapeConfig.sessionId },
       body: postTemplateBody
     };
-    request.post(options, function(error, response, body) {
-      callback(null, 'four');
-    });
+    doRequest("Upload template", options, false, function(body) {}, callback);
   }
   
   function uploadComposition(callback) {
-    console.log('5');
     var postCompositionBody = fs.readFileSync('src/assets/sample_requests/vital-signs-composition.json', 'utf8');
     var options = {
       url: EhrscapeConfig.baseUrl + 'composition',
-      headers: {
-        'Ehr-Session': EhrscapeConfig.sessionId,
-        'Content-Type': 'application/json'
-      },
+      headers: { 'Ehr-Session': EhrscapeConfig.sessionId, 'Content-Type': 'application/json' },
       body: postCompositionBody,
-      qs: {
-        "ehrId": EhrscapeConfig.ehrId,
-        "templateId": EhrscapeConfig.templateId,
-        "format": 'FLAT',
-        "commiterName": EhrscapeConfig.commiterName
-      }
+      qs: { "ehrId": EhrscapeConfig.ehrId, "templateId": EhrscapeConfig.templateId, "format": 'FLAT', "commiterName": EhrscapeConfig.commiterName }
     };
-    request.post(options, function(error, response, body) {
+    doRequest("Upload composition", options, true, function(body) {
       var body = JSON.parse(body);
       EhrscapeConfig.compositionId = body.compositionUid;
-      callback(null, 'five');
-    });
+    }, callback);
   }
 
 });
