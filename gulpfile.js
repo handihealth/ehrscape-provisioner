@@ -87,7 +87,7 @@ gulp.task('watch-test', function() {
 
 gulp.task('watch', function() {
   gulp.watch('./src/assets/stylesheets/*.scss', ['sass']);
-  gulp.watch(['./src/angular/*.js', './app/*/*.js'], ['combine-angular']);
+  gulp.watch(['./src/angular/*.js', './src/angular/*/*.js'], ['combine-angular']);
   gulp.src(testFiles)
     .pipe(karma({
       configFile: 'karma.conf.js',
