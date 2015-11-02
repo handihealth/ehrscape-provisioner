@@ -12,7 +12,7 @@ From the index page of the app, you can enter your Ehrscape username and passwor
 
 ### API
 
-If you would like to carry out the same provision using an API call then use an HTTP client of your choice (such as Postman) and create a POST request to /api/provision with the request body specified as:
+If you would like to carry out the same provision using an API call then use an HTTP client of your choice (such as Postman) and create a POST request to `/api/provision` with the request body specified as:
 
 ```
 {
@@ -21,7 +21,7 @@ If you would like to carry out the same provision using an API call then use an 
 }
 ```
 
-The base URL for the ehrscape instance is set to [] but can be overridden by also supplying it in the request body, such as:
+The base URL for the ehrscape instance is set to https://ehrscape.code-4-health.org/rest/v1/ but can be overridden by also supplying it in the request body, such as:
 
 ```
 {
