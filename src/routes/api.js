@@ -16,17 +16,18 @@ router.post('/provision', function(req, res, next) {
   }
 
   async.series([getSession, createPatient, createEhr, uploadTemplate, uploadComposition], function(err, results) {
-    res.json({ requests: results, config: EhrscapeConfig });
+    var overallStatus = err ? 'FAILED' : 'SUCCESSFUL';
+    res.json({ status: overallStatus, requests: results, config: EhrscapeConfig });
   });
 
   function doRequest(desc, options, showRequestBody, onResponse, callback) {
     var startDate = Date.now();
     request.post(options, function(error, response, body) {
-      var timeTaken = Date.now() - startDate;
+      var timeTaken = (Date.now() - startDate) + 'ms';
       onResponse(body);
-      var reqBody = showRequestBody ? options.body : '';
-      var ehrscapeRequest = new EhrscapeRequest({ description: desc, url: response.request.href, method: response.request.method, requestBody: reqBody, timeTaken: timeTaken+'ms', responseBody: body, statusCode: response.statusCode });
-      callback(null, ehrscapeRequest);
+      var ehrscapeRequest = new EhrscapeRequest({ description: desc, url: response.request.href, method: response.request.method, requestBody: showRequestBody ? options.body : '', timeTaken: timeTaken, responseBody: body, statusCode: response.statusCode });
+      var err = response.statusCode !== 201 ? true : null;
+      callback(err, ehrscapeRequest);
     });
   }
 
