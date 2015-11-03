@@ -12,8 +12,8 @@ module.exports = function(config){
       'src/angular/controllers/*.js',
       'src/angular/directives/*.js',
       'src/angular/models/*.js',
-      'test/controllers/*.js',
-      'test/models/*.js',
+      'spec/angular/controllers/*.js',
+      'spec/angular/models/*.js',
     ],
 
     autoWatch : true,
