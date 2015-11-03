@@ -7,7 +7,7 @@
     "prestart": "npm install",
     "start": "node ./bin/www",
     "pretest": "npm install",
-    "test": "karma start karma.conf.js --reporter=dots --browsers Firefox --single-run",
+    "test": "jasmine && karma start karma.conf.js --reporter=dots --browsers Firefox --single-run",
     "preupdate-webdriver": "npm install",
     "update-webdriver": "webdriver-manager update",
     "preprotractor": "npm run update-webdriver",
@@ -39,8 +39,9 @@
     "serve-favicon": "~2.2.0"
   },
   "devDependencies": {
-    "gulp-angular-protractor": "0.0.2",
+    "gulp-jasmine": "^2.2.0",
     "gulp-karma": "0.0.4",
+    "gulp-protractor": "^1.0.0",
     "gulp-watch": "^4.2.4",
     "jasmine-core": "^2.3.4",
     "karma": "~0.12",

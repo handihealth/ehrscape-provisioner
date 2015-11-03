@@ -3,7 +3,8 @@ var concat = require('gulp-concat');
 var sass = require('gulp-sass');
 var watch = require('gulp-watch');
 var karma = require('gulp-karma');
-var angularProtractor = require('gulp-angular-protractor');
+var jasmine = require('gulp-jasmine');
+var protractor = require("gulp-protractor").protractor;
 
 var testFiles = [
   './bower_components/angular/angular.js',
@@ -14,11 +15,16 @@ var testFiles = [
   './src/angular/controllers/*.js',
   './src/angular/directives/*.js',
   './src/angular/models/*.js',
-  './test/controllers/*.js',
-  './test/models/*.js',
+  './spec/angular/controllers/*.js',
+  './spec/angular/models/*.js',
 ];
 
-gulp.task('test', function() {
+gulp.task('test-node', function() {
+  gulp.src('./spec/**[^angular]/*.js')
+    .pipe(jasmine());
+});
+
+gulp.task('test-angular', function() {
   gulp.src(testFiles)
     .pipe(karma({
       configFile: 'karma.conf.js',
@@ -27,16 +33,16 @@ gulp.task('test', function() {
     .on('error', function(err) {
       throw err;
     });
-  gulp.src(['./e2e-test/*.js'])
-    .pipe(angularProtractor({
-        'configFile': './e2e-test/protractor.conf.js',
-        'args': ['--baseUrl', 'http://127.0.0.1:8080'],
-        'autoStartStopServer': true,
-        'debug': true
+  gulp.src(["./e2e-test/*.js"])
+    .pipe(protractor({
+        configFile: "e2e-test/protractor.conf.js",
+        args: ['--baseUrl', 'http://127.0.0.1:8080']
     }))
-    .on('error', function(e) {
-      throw e;
-    });
+    .on('error', function(e) { throw e })
+});
+
+gulp.task('test', function() {
+  gulp.start('test-node', 'test-angular');
 });
 
 gulp.task('default', function() {
@@ -88,9 +94,4 @@ gulp.task('watch-test', function() {
 gulp.task('watch', function() {
   gulp.watch('./src/assets/stylesheets/*.scss', ['sass']);
   gulp.watch(['./src/angular/*.js', './src/angular/*/*.js'], ['combine-angular']);
-  gulp.src(testFiles)
-    .pipe(karma({
-      configFile: 'karma.conf.js',
-      action: 'watch'
-    }));
 });
