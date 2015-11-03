@@ -7,12 +7,12 @@ var EhrscapeRequest = function(props) {
   this.method = props.method;
   this.url = props.url;
   this.request = {
-    "requestBody": props.requestBody,
-    "timeTaken": props.timeTaken
+    requestBody: props.requestBody,
+    timeTaken: props.timeTaken
   }
   this.response = {
-    "statusCode": props.statusCode,
-    "responseBody": JSON.stringify(props.responseBody, null, 2)
+    statusCode: props.statusCode,
+    responseBody: JSON.stringify(props.responseBody, null, 2)
   }
 }
 
@@ -36,6 +36,15 @@ EhrscapeRequest.getSession = function(callback) {
     var body = JSON.parse(body);
     EhrscapeConfig.sessionId = body.sessionId;
   }, callback);
+}
+
+EhrscapeRequest.createPatientNew = function(postPartyBody, callback) {
+  var options = {
+    url: EhrscapeConfig.baseUrl + 'demographics/party',
+    headers: { 'Ehr-Session': EhrscapeConfig.sessionId, 'Content-Type': 'application/json' },
+    body: postPartyBody
+  };
+  EhrscapeRequest.doRequest("Create patient", options, true, function(body) {}, callback);
 }
 
 EhrscapeRequest.createPatient = function(callback) {
