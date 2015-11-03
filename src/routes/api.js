@@ -5,7 +5,7 @@ var router = express.Router();
 var EhrscapeConfig = require('../models/ehrscapeConfig');
 var EhrscapeRequest = require('../models/ehrscapeRequest');
 
-router.post('/provision', function(req, res, next) {
+router.post('/provision/single-patient', function(req, res, next) {
 
   EhrscapeConfig.username = req.body.username;
   EhrscapeConfig.password = req.body.password;
@@ -25,6 +25,10 @@ router.post('/provision', function(req, res, next) {
     }
   );
 
+});
+
+router.post('/provision/multiple-patient', function(req, res, next) {
+  res.json({ status: 'SUCCESSFUL' });
 });
 
 module.exports = router;
