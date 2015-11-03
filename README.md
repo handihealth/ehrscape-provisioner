@@ -2,7 +2,34 @@
 
 [![Build Status](https://travis-ci.org/handihealth/ehrscape-provisioner.svg?branch=master)](https://travis-ci.org/handihealth/ehrscape-provisioner)
 
-This app is built and deployed by Travis CI to Openshift, the resulting deploy can be found at [http://provisioner-handihopd.rhcloud.com/](http://provisioner-handihopd.rhcloud.com/)
+This app is built and deployed by Travis CI to Openshift, the resulting deploy can be found at [http://provisioner-handihopd.rhcloud.com/](http://provisioner-handihopd.rhcloud.com/). It is designed to be used to automatically provision an ehrscape instance with sample data, such as patient, EHR, template and composition.
+
+## Usage
+
+### UI
+
+From the index page of the app, you can enter your Ehrscape username and password, click Go! and watch it run through the various requests to provision your domain with a sample patient, EHR, template and composition.
+
+### API
+
+If you would like to carry out the same provision using an API call then use an HTTP client of your choice (such as Postman) and create a POST request to `/api/provision` with the request body specified as:
+
+```
+{
+  "username": "my_username",
+  "password": "my_password"
+}
+```
+
+The base URL for the ehrscape instance is set to https://ehrscape.code-4-health.org/rest/v1/ but can be overridden by also supplying it in the request body, such as:
+
+```
+{
+  "username": "my_username",
+  "password": "my_password",
+  "baseUrl": "https://my.ehrscape.url/rest/v1/"
+}
+```
 
 ## Development
 

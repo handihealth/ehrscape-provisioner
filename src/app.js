@@ -7,6 +7,7 @@ var bodyParser = require('body-parser');
 
 var index = require('./routes/index');
 var download = require('./routes/download');
+var api = require('./routes/api');
 
 var app = express();
 
@@ -25,6 +26,7 @@ app.use('/views', express.static(path.join(__dirname, '../src/angular/views')));
 
 app.use('/', index);
 app.use('/download', download);
+app.use('/api', api);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
