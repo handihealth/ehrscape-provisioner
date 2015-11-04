@@ -58,9 +58,7 @@ Patient.prototype.getSubjectId = function() {
 
 Patient.prototype.getDob = function() {
   var dob = moment(this.data[Patient.DOB_INDEX], "DD/MM/YYYY");
-  // console.log(dob.date());
-  // console.log(dob.format('YYYY-MM-DDT00:00:00.000Z'));
-  return dob.format('YYYY-MM-DDT00:00:00.000Z');
+  return dob.format('YYYY-MM-DD');
 };
 
 module.exports = Patient;

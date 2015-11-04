@@ -5,21 +5,7 @@ describe("Patient", function() {
   var patient;
 
   beforeEach(function() {
-    patient = new Patient([
-      1,
-      'Mr',
-      'John',
-      'Doe',
-      '123 High Street',
-      'Village',
-      'Townsville',
-      'AB12 3CD',
-      '01234 567890',
-      '06/06/1944',
-      'Male',
-      '1234567890',
-      '987654321',
-    ]);
+    patient = new Patient([1, 'Mr', 'John', 'Doe', '123 High Street', 'Village', 'Townsville', 'AB12 3CD', '01234 567890', '06/06/1944', 'Male', '1234567890', '987654321']);
   });
 
   it("should get the address", function() {
@@ -35,11 +21,11 @@ describe("Patient", function() {
   });
 
   it("should get the subject id", function() {
-    expect(patient.getDob(false)).toBe('1944-06-06T00:00:00.000+01:00');
+    expect(patient.getDob(false)).toBe('1944-06-06');
   });
 
   it("should return patient as json", function() {
-    expect(patient.toJSON()).toBe('{"address":{"address":"123 High Street, Village, Townsville, AB12 3CD"},"dateOfBirth":"1944-06-06T00:00:00.000+01:00","firstNames":"John","gender":"MALE","lastNames":"Doe","partyAdditionalInfo":[{"key":"title","value":"Mr"},{"key":"uk.nhs.hospital_number","value":"1234567890"}]}');
+    expect(patient.toJSON()).toBe('{"address":{"address":"123 High Street, Village, Townsville, AB12 3CD"},"dateOfBirth":"1944-06-06","firstNames":"John","gender":"MALE","lastNames":"Doe","partyAdditionalInfo":[{"key":"title","value":"Mr"},{"key":"uk.nhs.hospital_number","value":"1234567890"}]}');
   });
 
 });
