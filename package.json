@@ -7,7 +7,7 @@
     "prestart": "npm install",
     "start": "node ./bin/www",
     "pretest": "npm install",
-    "test": "jasmine && karma start karma.conf.js --reporter=dots --browsers Firefox --single-run",
+    "test": "node_modules/.bin/jasmine-node spec && node_modules/.bin/karma start karma.conf.js --reporter=dots --single-run",
     "preupdate-webdriver": "npm install",
     "update-webdriver": "webdriver-manager update",
     "preprotractor": "npm run update-webdriver",
