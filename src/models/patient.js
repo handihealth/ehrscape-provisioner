@@ -27,7 +27,7 @@ Patient.prototype.toJSON = function(prettyPrint) {
     },
     dateOfBirth: this.getDob(),
     firstNames: this.data[Patient.FIRST_NAME_INDEX],
-    gender: this.getGender(),
+    gender: this.getGenderUpperCase(),
     lastNames: this.data[Patient.LAST_NAME_INDEX],
     partyAdditionalInfo: [
       {
@@ -48,8 +48,12 @@ Patient.prototype.getAddress = function() {
   return address.join(', ');
 };
 
-Patient.prototype.getGender = function() {
+Patient.prototype.getGenderUpperCase = function() {
   return this.data[Patient.GENDER_INDEX].toUpperCase();
+};
+
+Patient.prototype.getGender = function() {
+  return this.data[Patient.GENDER_INDEX];
 };
 
 Patient.prototype.getSubjectId = function() {
@@ -59,6 +63,107 @@ Patient.prototype.getSubjectId = function() {
 Patient.prototype.getDob = function() {
   var dob = moment(this.data[Patient.DOB_INDEX], "DD/MM/YYYY");
   return dob.format('YYYY-MM-DD');
+};
+
+Patient.prototype.getYearOfBirth = function() {
+  var dob = moment(this.data[Patient.DOB_INDEX], "DD/MM/YYYY");
+  return dob.format('YYYY');
+};
+
+Patient.prototype.getEhrStatusBody = function() {
+  return JSON.stringify({
+    "otherDetails": {
+      "@class": "ITEM_TREE",
+      "items": [
+        {
+          "@class": "CLUSTER",
+          "archetype_details": {
+            "@class": "ARCHETYPED",
+            "archetype_id": {
+              "@class": "ARCHETYPE_ID",
+              "value": "openEHR-EHR-CLUSTER.person_anonymised_parent.v1"
+            },
+            "rm_version": "1.0.1"
+          },
+          "archetype_node_id": "openEHR-EHR-CLUSTER.person_anonymised_parent.v1",
+          "items": [
+            {
+              "@class": "ELEMENT",
+              "archetype_node_id": "at0001",
+              "name": {
+                "@class": "DV_TEXT",
+                "value": "Administrative Gender"
+              },
+              "value": {
+                "@class": "DV_CODED_TEXT",
+                "defining_code": {
+                  "@class": "CODE_PHRASE",
+                  "code_string": "at0009",
+                  "terminology_id": {
+                    "@class": "TERMINOLOGY_ID",
+                    "value": "local"
+                  }
+                },
+                "value": this.getGender()
+              }
+            },
+            {
+              "@class": "ELEMENT",
+              "archetype_node_id": "at0002",
+              "name": {
+                "@class": "DV_TEXT",
+                "value": "Birth Sex"
+              },
+              "value": {
+                "@class": "DV_CODED_TEXT",
+                "defining_code": {
+                  "@class": "CODE_PHRASE",
+                  "code_string": "at0009",
+                  "terminology_id": {
+                    "@class": "TERMINOLOGY_ID",
+                    "value": "local"
+                  }
+                },
+                "value": this.getGender()
+              }
+            },
+            {
+              "@class": "ELEMENT",
+              "archetype_node_id": "at0003",
+              "name": {
+                "@class": "DV_TEXT",
+                "value": "Vital Status"
+              },
+              "value": {
+                "@class": "DV_CODED_TEXT",
+                "defining_code": {
+                  "@class": "CODE_PHRASE",
+                  "code_string": "at0004",
+                  "terminology_id": {
+                    "@class": "TERMINOLOGY_ID",
+                    "value": "local"
+                  }
+                },
+                "value": "Alive"
+              }
+            },
+            {
+              "@class": "ELEMENT",
+              "archetype_node_id": "at0014",
+              "name": {
+                "@class": "DV_TEXT",
+                "value": "Birth Year"
+              },
+              "value": {
+                "@class": "DV_DATE",
+                "value": this.getYearOfBirth()
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }, null, 2);
 };
 
 module.exports = Patient;

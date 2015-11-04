@@ -34,11 +34,11 @@ router.post('/provision/multiple-patient', function(req, masterResponse, next) {
   csvParser.parse(function(patients) {
     EhrscapeRequest.getSession(function(err, res) {
       results.push(res);
-      var patientsToLoad = patients.length;
-      for (var i = 1; i < patients.length; i++) {
+      var patientsToLoad = 2;
+      for (var i = 1; i < 3; i++) {
         var party = new Patient(patients[i]);
-        EhrscapeRequest.createPatient(party.toJSON(true), function(err, res) {
-          results.push(res);
+        EhrscapeRequest.createPatientAndEhr(party, function(res) {
+          results = results.concat(res);
           patientsToLoad -= 1;
           if (patientsToLoad === 0) {
             masterResponse.json({ status: 'SUCCESSFUL', requests: results, config: EhrscapeConfig });

@@ -13,7 +13,11 @@ describe("Patient", function() {
   });
 
   it("should get the gender", function() {
-    expect(patient.getGender()).toBe('MALE');
+    expect(patient.getGender()).toBe('Male');
+  });
+
+  it("should get the gender in upper case", function() {
+    expect(patient.getGenderUpperCase()).toBe('MALE');
   });
 
   it("should get the subject id", function() {

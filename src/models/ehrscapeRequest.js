@@ -56,11 +56,12 @@ EhrscapeRequest.createPatientDefault = function(callback) {
   EhrscapeRequest.createPatient(postPartyBody, callback);
 }
 
-EhrscapeRequest.createEhr = function(subjectId, callback) {
+EhrscapeRequest.createEhr = function(postEhrBody, subjectId, callback) {
   var options = {
     url: EhrscapeConfig.baseUrl + 'ehr',
     headers: { 'Ehr-Session': EhrscapeConfig.sessionId },
-    qs: { "subjectId": subjectId, "subjectNamespace": EhrscapeConfig.subjectNamespace, "commiterName": EhrscapeConfig.commiterName }
+    qs: { "subjectId": subjectId, "subjectNamespace": EhrscapeConfig.subjectNamespace, "commiterName": EhrscapeConfig.commiterName },
+    body: postEhrBody
   };
   EhrscapeRequest.doRequest("Create EHR", options, true, function(body) {
     var body = JSON.parse(body);
@@ -69,7 +70,18 @@ EhrscapeRequest.createEhr = function(subjectId, callback) {
 }
 
 EhrscapeRequest.createEhrDefault = function(callback) {
-  EhrscapeRequest.createEhr(EhrscapeConfig.subjectId, callback);
+  EhrscapeRequest.createEhr(null, EhrscapeConfig.subjectId, callback);
+}
+
+EhrscapeRequest.createPatientAndEhr = function(party, callback) {
+  var results = [];
+  EhrscapeRequest.createPatient(party.toJSON(true), function(err, res) {
+    results.push(res);
+    EhrscapeRequest.createEhr(party.getEhrStatusBody(), party.getSubjectId(), function(err, res) {
+      results.push(res);
+      callback(results);
+    });
+  });
 }
 
 EhrscapeRequest.uploadTemplate = function(callback) {
