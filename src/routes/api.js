@@ -14,7 +14,7 @@ router.post('/provision/single-patient', function(req, res, next) {
   async.series([
       EhrscapeRequest.getSession,
       EhrscapeRequest.createPatientDefault,
-      EhrscapeRequest.createEhr,
+      EhrscapeRequest.createEhrDefault,
       EhrscapeRequest.uploadTemplate,
       EhrscapeRequest.uploadComposition
     ], function(err, results) {
@@ -37,7 +37,7 @@ router.post('/provision/multiple-patient', function(req, masterResponse, next) {
       var patientsToLoad = patients.length;
       for (var i = 1; i < patients.length; i++) {
         var party = new Patient(patients[i]);
-        EhrscapeRequest.createPatientNew(party.toJSON(true), function(err, res) {
+        EhrscapeRequest.createPatient(party.toJSON(true), function(err, res) {
           results.push(res);
           patientsToLoad -= 1;
           if (patientsToLoad === 0) {
