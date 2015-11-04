@@ -9,11 +9,7 @@ var Patient = require('../models/patient');
 
 router.post('/provision/single-patient', function(req, res, next) {
 
-  EhrscapeConfig.username = req.body.username;
-  EhrscapeConfig.password = req.body.password;
-  if (req.body.baseUrl !== undefined) {
-    EhrscapeConfig.baseUrl = req.body.baseUrl;
-  }
+  setConfigFromRequest(req.body);
 
   async.series([
       EhrscapeRequest.getSession,
@@ -29,48 +25,34 @@ router.post('/provision/single-patient', function(req, res, next) {
 
 });
 
-router.post('/provision/multiple-patient', function(req, res, next) {
+router.post('/provision/multiple-patient', function(req, masterResponse, next) {
 
-  EhrscapeConfig.username = req.body.username;
-  EhrscapeConfig.password = req.body.password;
-  if (req.body.baseUrl !== undefined) {
-    EhrscapeConfig.baseUrl = req.body.baseUrl;
-  }
-
+  setConfigFromRequest(req.body);
   var csvParser = new CsvParser('src/assets/data/patients.csv');
-  csvParser.parse(function(data) {
-    // var requests = [];
-    // requests.push(EhrscapeRequest.getSession);
+  var results = [];
+
+  csvParser.parse(function(patients) {
 
     EhrscapeRequest.getSession(function(err, res) {
-      console.log(res);
-
-      for (var i = 1; i < 2; i++) {
-        console.log(data[i]);
-        var party = new Patient(data[i]);
-        // console.log(party.getDob());
-        EhrscapeRequest.createPatientNew(party.toJSON(), function(err, res) {
-          console.log(res);
+      results.push(res);
+      for (var i = 1; i < patients.length; i++) {
+        var party = new Patient(patients[i]);
+        EhrscapeRequest.createPatientNew(party.toJSON(true), function(err, res) {
+          results.push(res);
         });
-        // console.log(party.toJSON());
-        // requests.push(EhrscapeRequest.createPatientNew(party.toJSON()));
       };
+      masterResponse.json({ status: 'SUCCESSFUL', requests: results, config: EhrscapeConfig });
 
     });
-
-    for (var i = 1; i < 2; i++) {
-      var party = new Patient(data[i]);
-      // console.log(party.toJSON());
-      // requests.push(EhrscapeRequest.createPatientNew(party.toJSON()));
-    };
-
-    // async.series(requests, function(err, results) {
-    //   var overallStatus = err ? 'FAILED' : 'SUCCESSFUL';
-    //   res.json({ status: overallStatus, requests: results, config: EhrscapeConfig });
-    // });
-
-    res.json({ status: 'SUCCESSFUL' });
   });
 });
+
+function setConfigFromRequest(requestBody) {
+  EhrscapeConfig.username = requestBody.username;
+  EhrscapeConfig.password = requestBody.password;
+  if (requestBody.baseUrl !== undefined) {
+    EhrscapeConfig.baseUrl = requestBody.baseUrl;
+  }
+}
 
 module.exports = router;
