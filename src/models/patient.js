@@ -5,6 +5,7 @@ var Patient = function(data) {
   this.data = data;
 }
 
+Patient.KEY_INDEX = 0;
 Patient.TITLE_INDEX = 1;
 Patient.FIRST_NAME_INDEX = 2;
 Patient.LAST_NAME_INDEX = 3;
@@ -18,7 +19,8 @@ Patient.GENDER_INDEX = 10;
 Patient.NHS_NUMBER_INDEX = 11;
 Patient.PAS_NUMBER_INDEX = 12;
 
-Patient.prototype.toJSON = function() {
+Patient.prototype.toJSON = function(prettyPrint) {
+  var indent = prettyPrint ? 2 : 0;
   var party = {
     address: {
       address: this.getAddress(),
@@ -38,7 +40,7 @@ Patient.prototype.toJSON = function() {
       }
     ]
   };
-  return JSON.stringify(party, null, 2);
+  return JSON.stringify(party, null, indent);
 };
 
 Patient.prototype.getAddress = function() {
