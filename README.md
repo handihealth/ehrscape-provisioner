@@ -21,13 +21,14 @@ If you would like to carry out the same provision using an API call then use an 
 }
 ```
 
-The base URL for the ehrscape instance is set to https://ehrscape.code-4-health.org/rest/v1/ but can be overridden by also supplying it in the request body, such as:
+The default base URL for the ehrscape instance is _https://ehrscape.code-4-health.org/rest/v1/_ but can be overridden by also supplying it in the request body. The default subject namespace is _uk.nhs.hospital_number_ but this can also be overridden in the same way. See the following example: -
 
 ```
 {
   "username": "my_username",
   "password": "my_password",
-  "baseUrl": "https://my.ehrscape.url/rest/v1/"
+  "baseUrl": "https://my.ehrscape.url/rest/v1/",
+  "subjectNamespace": "uk.nhs.nhs_number"
 }
 ```
 

@@ -55,6 +55,9 @@ function setConfigFromRequest(requestBody) {
   if (requestBody.baseUrl !== undefined) {
     EhrscapeConfig.baseUrl = requestBody.baseUrl;
   }
+  if (requestBody.subjectNamespace !== undefined) {
+    EhrscapeConfig.subjectNamespace = requestBody.subjectNamespace;
+  }
 }
 
 module.exports = router;
