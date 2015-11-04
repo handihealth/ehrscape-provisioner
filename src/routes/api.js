@@ -13,7 +13,7 @@ router.post('/provision/single-patient', function(req, res, next) {
 
   async.series([
       EhrscapeRequest.getSession,
-      EhrscapeRequest.createPatient,
+      EhrscapeRequest.createPatientDefault,
       EhrscapeRequest.createEhr,
       EhrscapeRequest.uploadTemplate,
       EhrscapeRequest.uploadComposition

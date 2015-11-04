@@ -38,17 +38,7 @@ EhrscapeRequest.getSession = function(callback) {
   }, callback);
 }
 
-EhrscapeRequest.createPatientNew = function(postPartyBody, callback) {
-  var options = {
-    url: EhrscapeConfig.baseUrl + 'demographics/party',
-    headers: { 'Ehr-Session': EhrscapeConfig.sessionId, 'Content-Type': 'application/json' },
-    body: postPartyBody
-  };
-  EhrscapeRequest.doRequest("Create patient", options, true, function(body) {}, callback);
-}
-
-EhrscapeRequest.createPatient = function(callback) {
-  var postPartyBody = fs.readFileSync('src/assets/sample_requests/party.json', 'utf8');
+EhrscapeRequest.createPatient = function(postPartyBody, callback) {
   var options = {
     url: EhrscapeConfig.baseUrl + 'demographics/party',
     headers: { 'Ehr-Session': EhrscapeConfig.sessionId, 'Content-Type': 'application/json' },
@@ -59,6 +49,11 @@ EhrscapeRequest.createPatient = function(callback) {
     var subjectId = body.meta.href;
     EhrscapeConfig.subjectId = subjectId.substr(subjectId.lastIndexOf('/')+1);
   }, callback);
+}
+
+EhrscapeRequest.createPatientDefault = function(callback) {
+  var postPartyBody = fs.readFileSync('src/assets/sample_requests/party.json', 'utf8');
+  EhrscapeRequest.createPatient(postPartyBody, callback);
 }
 
 EhrscapeRequest.createEhr = function(callback) {
