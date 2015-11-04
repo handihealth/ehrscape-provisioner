@@ -41,7 +41,15 @@ router.post('/provision/multiple-patient', function(req, masterResponse, next) {
           results = results.concat(res);
           patientsToLoad -= 1;
           if (patientsToLoad === 0) {
-            masterResponse.json({ status: 'SUCCESSFUL', requests: results, config: EhrscapeConfig });
+
+            EhrscapeRequest.uploadTemplate(function(err, res) {
+              results.push(res);
+              EhrscapeRequest.importCsv('src/assets/data/nursing-obs.csv', function(err, res) {
+                results.push(res);
+                masterResponse.json({ status: 'SUCCESSFUL', requests: results, config: EhrscapeConfig });
+              });
+            });
+
           }
         });
       };

@@ -108,4 +108,15 @@ EhrscapeRequest.uploadComposition = function(callback) {
   }, callback);
 }
 
+EhrscapeRequest.importCsv = function(csvFilePath, callback) {
+  var buffer = fs.readFileSync(csvFilePath);
+  var options = {
+    url: EhrscapeConfig.baseUrl + 'import/csv',
+    headers: { 'Ehr-Session': EhrscapeConfig.sessionId, 'Content-Type': 'application/octet-stream' },
+    body: buffer,
+    qs: { "subjectNamespace": EhrscapeConfig.subjectNamespace, "templateId": EhrscapeConfig.templateId, "templateLanguage": 'en', "commiterName": EhrscapeConfig.commiterName }
+  };
+  EhrscapeRequest.doRequest("Import CSV", options, false, function(body) {}, callback);
+}
+
 module.exports = EhrscapeRequest;
