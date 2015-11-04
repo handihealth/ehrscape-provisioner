@@ -32,17 +32,19 @@ router.post('/provision/multiple-patient', function(req, masterResponse, next) {
   var results = [];
 
   csvParser.parse(function(patients) {
-
     EhrscapeRequest.getSession(function(err, res) {
       results.push(res);
+      var patientsToLoad = patients.length;
       for (var i = 1; i < patients.length; i++) {
         var party = new Patient(patients[i]);
         EhrscapeRequest.createPatientNew(party.toJSON(true), function(err, res) {
           results.push(res);
+          patientsToLoad -= 1;
+          if (patientsToLoad === 0) {
+            masterResponse.json({ status: 'SUCCESSFUL', requests: results, config: EhrscapeConfig });
+          }
         });
       };
-      masterResponse.json({ status: 'SUCCESSFUL', requests: results, config: EhrscapeConfig });
-
     });
   });
 });
