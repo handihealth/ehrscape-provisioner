@@ -22,7 +22,7 @@ EhrscapeRequest.doPostRequest = function(desc, options, showRequestBody, onRespo
     var timeTaken = (Date.now() - startDate) + 'ms';
     onResponse(body);
     var ehrscapeRequest = new EhrscapeRequest({ description: desc, url: response.request.href, method: response.request.method, requestBody: showRequestBody ? options.body : '', timeTaken: timeTaken, responseBody: body, statusCode: response.statusCode });
-    var err = (response.statusCode !== 200 || response.statusCode !== 201) ? true : null;
+    var err = (response.statusCode !== 200 && response.statusCode !== 201) ? true : null;
     callback(err, ehrscapeRequest);
   });
 }
@@ -33,7 +33,7 @@ EhrscapeRequest.doPutRequest = function(desc, options, showRequestBody, onRespon
     var timeTaken = (Date.now() - startDate) + 'ms';
     onResponse(body);
     var ehrscapeRequest = new EhrscapeRequest({ description: desc, url: response.request.href, method: response.request.method, requestBody: showRequestBody ? options.body : '', timeTaken: timeTaken, responseBody: body, statusCode: response.statusCode });
-    var err = (response.statusCode !== 200 || response.statusCode !== 201) ? true : null;
+    var err = (response.statusCode !== 200 && response.statusCode !== 201) ? true : null;
     callback(err, ehrscapeRequest);
   });
 }
@@ -44,7 +44,7 @@ EhrscapeRequest.doGetRequest = function(desc, options, showRequestBody, onRespon
     var timeTaken = (Date.now() - startDate) + 'ms';
     onResponse(body);
     var ehrscapeRequest = new EhrscapeRequest({ description: desc, url: response.request.href, method: response.request.method, requestBody: showRequestBody ? options.body : '', timeTaken: timeTaken, responseBody: body, statusCode: response.statusCode });
-    var err = (response.statusCode !== 200 || response.statusCode !== 201) ? true : null;
+    var err = (response.statusCode !== 200 && response.statusCode !== 201) ? true : null;
     callback(err, ehrscapeRequest);
   });
 }
