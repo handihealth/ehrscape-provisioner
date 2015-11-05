@@ -15,7 +15,7 @@ router.post('/provision/single-patient', function(req, res, next) {
       EhrscapeRequest.getSession,
       EhrscapeRequest.createPatientDefault,
       EhrscapeRequest.createEhrDefault,
-      EhrscapeRequest.uploadTemplate,
+      EhrscapeRequest.uploadTemplateDefault,
       EhrscapeRequest.uploadComposition
     ], function(err, results) {
       var overallStatus = err ? 'FAILED' : 'SUCCESSFUL';
@@ -42,12 +42,16 @@ router.post('/provision/multiple-patient', function(req, masterResponse, next) {
           patientsToLoad -= 1;
           if (patientsToLoad === 0) {
 
-            EhrscapeRequest.uploadTemplate(function(err, res) {
+            EhrscapeRequest.uploadTemplate('src/assets/sample_requests/vital-signs-template.xml', function(err, res) {
               results.push(res);
               EhrscapeRequest.importCsv('src/assets/data/nursing-obs.csv', function(err, res) {
                 results.push(res);
                 masterResponse.json({ status: 'SUCCESSFUL', requests: results, config: EhrscapeConfig });
               });
+            });
+
+            EhrscapeRequest.uploadTemplate('src/assets/sample_requests/problems-template.xml', function(err, res) {
+              results.push(res);
             });
 
           }

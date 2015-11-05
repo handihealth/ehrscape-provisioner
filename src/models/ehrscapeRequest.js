@@ -142,14 +142,18 @@ EhrscapeRequest.createPatientAndEhr = function(party, callback) {
   });
 }
 
-EhrscapeRequest.uploadTemplate = function(callback) {
-  var postTemplateBody = fs.readFileSync('src/assets/sample_requests/vital-signs-template.xml', 'utf8');
+EhrscapeRequest.uploadTemplate = function(templateFilePath, callback) {
+  var postTemplateBody = fs.readFileSync(templateFilePath, 'utf8');
   var options = {
     url: EhrscapeConfig.baseUrl + 'template',
     headers: { 'Ehr-Session': EhrscapeConfig.sessionId },
     body: postTemplateBody
   };
   EhrscapeRequest.doPostRequest("Upload template", options, false, function(body) {}, callback);
+}
+
+EhrscapeRequest.uploadTemplateDefault = function(callback) {
+  EhrscapeRequest.uploadTemplate('src/assets/sample_requests/vital-signs-template.xml', callback);
 }
   
 EhrscapeRequest.uploadComposition = function(callback) {
