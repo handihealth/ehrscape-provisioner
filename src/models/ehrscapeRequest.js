@@ -91,6 +91,10 @@ EhrscapeRequest.createEhr = function(postEhrBody, subjectId, callback) {
   }, callback);
 }
 
+EhrscapeRequest.createEhrDefault = function(callback) {
+  EhrscapeRequest.createEhr(null, EhrscapeConfig.subjectId, callback);
+}
+
 EhrscapeRequest.getEhr = function(subjectId, callback) {
   var options = {
     url: EhrscapeConfig.baseUrl + 'ehr',
@@ -107,10 +111,6 @@ EhrscapeRequest.updateEhr = function(postEhrBody, ehrId, callback) {
     body: postEhrBody
   };
   EhrscapeRequest.doPutRequest("Update EHR", options, true, function(body) {}, callback);
-}
-
-EhrscapeRequest.createEhrDefault = function(callback) {
-  EhrscapeRequest.createEhr(null, EhrscapeConfig.subjectId, callback);
 }
 
 EhrscapeRequest.createPatientAndEhr = function(party, callback) {
