@@ -72,6 +72,10 @@ Patient.prototype.getYearOfBirth = function() {
 
 Patient.prototype.getEhrStatusBody = function() {
   return JSON.stringify({
+    "subjectId": this.getSubjectId(),
+    "subjectNamespace": EhrscapeConfig.subjectNamespace,
+    "queryable": true,
+    "modifiable": true,
     "otherDetails": {
       "@class": "ITEM_TREE",
       "items": [
