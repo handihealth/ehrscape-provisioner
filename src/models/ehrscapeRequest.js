@@ -23,6 +23,7 @@ EhrscapeRequest.doPostRequest = function(desc, options, showRequestBody, onRespo
     onResponse(body);
     var ehrscapeRequest = new EhrscapeRequest({ description: desc, url: response.request.href, method: response.request.method, requestBody: showRequestBody ? options.body : '', timeTaken: timeTaken, responseBody: body, statusCode: response.statusCode });
     var err = (response.statusCode !== 200 && response.statusCode !== 201) ? true : null;
+    console.log(desc);
     callback(err, ehrscapeRequest);
   });
 }
@@ -34,6 +35,7 @@ EhrscapeRequest.doPutRequest = function(desc, options, showRequestBody, onRespon
     onResponse(body);
     var ehrscapeRequest = new EhrscapeRequest({ description: desc, url: response.request.href, method: response.request.method, requestBody: showRequestBody ? options.body : '', timeTaken: timeTaken, responseBody: body, statusCode: response.statusCode });
     var err = (response.statusCode !== 200 && response.statusCode !== 201) ? true : null;
+    console.log(desc);
     callback(err, ehrscapeRequest);
   });
 }
@@ -45,6 +47,7 @@ EhrscapeRequest.doGetRequest = function(desc, options, showRequestBody, onRespon
     onResponse(body);
     var ehrscapeRequest = new EhrscapeRequest({ description: desc, url: response.request.href, method: response.request.method, requestBody: showRequestBody ? options.body : '', timeTaken: timeTaken, responseBody: body, statusCode: response.statusCode });
     var err = (response.statusCode !== 200 && response.statusCode !== 201) ? true : null;
+    console.log(desc);
     callback(err, ehrscapeRequest);
   });
 }
@@ -125,7 +128,7 @@ EhrscapeRequest.createPatientAndEhr = function(party, callback) {
         ehrId = body.ehrId;
         EhrscapeRequest.updateEhr(party.getEhrStatusBody(), ehrId, function(err, res) {
           results.push(res);
-          callback(results);
+          callback(results, ehrId);
         });
       }
       if (res.response.statusCode === 400) {
@@ -134,7 +137,7 @@ EhrscapeRequest.createPatientAndEhr = function(party, callback) {
           ehrId = JSON.parse(body).ehrId;
           EhrscapeRequest.updateEhr(party.getEhrStatusBody(), ehrId, function(err, res) {
             results.push(res);
-            callback(results);
+            callback(results, ehrId);
           });
         });
       }
@@ -142,32 +145,36 @@ EhrscapeRequest.createPatientAndEhr = function(party, callback) {
   });
 }
 
-EhrscapeRequest.uploadTemplate = function(templateFilePath, callback) {
+EhrscapeRequest.uploadTemplate = function(title, templateFilePath, callback) {
   var postTemplateBody = fs.readFileSync(templateFilePath, 'utf8');
   var options = {
     url: EhrscapeConfig.baseUrl + 'template',
     headers: { 'Ehr-Session': EhrscapeConfig.sessionId },
     body: postTemplateBody
   };
-  EhrscapeRequest.doPostRequest("Upload template", options, false, function(body) {}, callback);
+  EhrscapeRequest.doPostRequest("Upload template (" + title + ")", options, false, function(body) {}, callback);
 }
 
 EhrscapeRequest.uploadTemplateDefault = function(callback) {
-  EhrscapeRequest.uploadTemplate('src/assets/sample_requests/vital-signs-template.xml', callback);
+  EhrscapeRequest.uploadTemplate('Vital signs', 'src/assets/sample_requests/vital-signs-template.xml', callback);
 }
   
-EhrscapeRequest.uploadComposition = function(callback) {
-  var postCompositionBody = fs.readFileSync('src/assets/sample_requests/vital-signs-composition.json', 'utf8');
+EhrscapeRequest.uploadComposition = function(title, compositionFilePath, ehrId, templateId, callback) {
+  var postCompositionBody = fs.readFileSync(compositionFilePath, 'utf8');
   var options = {
     url: EhrscapeConfig.baseUrl + 'composition',
     headers: { 'Ehr-Session': EhrscapeConfig.sessionId, 'Content-Type': 'application/json' },
     body: postCompositionBody,
-    qs: { "ehrId": EhrscapeConfig.ehrId, "templateId": EhrscapeConfig.templateId, "format": 'FLAT', "commiterName": EhrscapeConfig.commiterName }
+    qs: { "ehrId": ehrId, "templateId": templateId, "format": 'FLAT', "commiterName": EhrscapeConfig.commiterName }
   };
-  EhrscapeRequest.doPostRequest("Upload composition", options, true, function(body) {
+  EhrscapeRequest.doPostRequest("Upload composition (" + title + ")", options, true, function(body) {
     var body = JSON.parse(body);
     EhrscapeConfig.compositionId = body.compositionUid;
   }, callback);
+}
+
+EhrscapeRequest.uploadCompositionDefault = function(callback) {
+  EhrscapeRequest.uploadComposition('Vital signs', 'src/assets/sample_requests/vital-signs-composition.json', EhrscapeConfig.ehrId, EhrscapeConfig.templateId, callback);
 }
 
 EhrscapeRequest.importCsv = function(csvFilePath, callback) {
