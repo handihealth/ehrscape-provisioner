@@ -133,6 +133,7 @@ EhrscapeRequest.createPatientAndEhr = function(party, callback) {
       }
       if (res.response.statusCode === 400) {
         EhrscapeRequest.getEhr(party.getSubjectId(), function(err, res) {
+          results.push(res);
           var body = JSON.parse(res.response.responseBody);
           ehrId = JSON.parse(body).ehrId;
           EhrscapeRequest.updateEhr(party.getEhrStatusBody(), ehrId, function(err, res) {
