@@ -20,10 +20,12 @@ EhrscapeRequest.doPostRequest = function(desc, options, showRequestBody, onRespo
   var startDate = Date.now();
   request.post(options, function(error, response, body) {
     var timeTaken = (Date.now() - startDate) + 'ms';
-    onResponse(body);
-    var ehrscapeRequest = new EhrscapeRequest({ description: desc, url: response.request.href, method: response.request.method, requestBody: showRequestBody ? options.body : '', timeTaken: timeTaken, responseBody: body, statusCode: response.statusCode });
     var err = (response.statusCode !== 200 && response.statusCode !== 201) ? true : null;
-    console.log(desc);
+    if (!err) {
+      onResponse(body);
+    }
+    var ehrscapeRequest = new EhrscapeRequest({ description: desc, url: response.request.href, method: response.request.method, requestBody: showRequestBody ? options.body : '', timeTaken: timeTaken, responseBody: body, statusCode: response.statusCode });
+    console.log(response.statusCode + ' | ' + desc);
     callback(err, ehrscapeRequest);
   });
 }
@@ -32,10 +34,12 @@ EhrscapeRequest.doPutRequest = function(desc, options, showRequestBody, onRespon
   var startDate = Date.now();
   request.put(options, function(error, response, body) {
     var timeTaken = (Date.now() - startDate) + 'ms';
-    onResponse(body);
-    var ehrscapeRequest = new EhrscapeRequest({ description: desc, url: response.request.href, method: response.request.method, requestBody: showRequestBody ? options.body : '', timeTaken: timeTaken, responseBody: body, statusCode: response.statusCode });
     var err = (response.statusCode !== 200 && response.statusCode !== 201) ? true : null;
-    console.log(desc);
+    if (!err) {
+      onResponse(body);
+    }
+    var ehrscapeRequest = new EhrscapeRequest({ description: desc, url: response.request.href, method: response.request.method, requestBody: showRequestBody ? options.body : '', timeTaken: timeTaken, responseBody: body, statusCode: response.statusCode });
+    console.log(response.statusCode + ' | ' + desc);
     callback(err, ehrscapeRequest);
   });
 }
@@ -44,10 +48,12 @@ EhrscapeRequest.doGetRequest = function(desc, options, showRequestBody, onRespon
   var startDate = Date.now();
   request.get(options, function(error, response, body) {
     var timeTaken = (Date.now() - startDate) + 'ms';
-    onResponse(body);
-    var ehrscapeRequest = new EhrscapeRequest({ description: desc, url: response.request.href, method: response.request.method, requestBody: showRequestBody ? options.body : '', timeTaken: timeTaken, responseBody: body, statusCode: response.statusCode });
     var err = (response.statusCode !== 200 && response.statusCode !== 201) ? true : null;
-    console.log(desc);
+    if (!err) {
+      onResponse(body);
+    }
+    var ehrscapeRequest = new EhrscapeRequest({ description: desc, url: response.request.href, method: response.request.method, requestBody: showRequestBody ? options.body : '', timeTaken: timeTaken, responseBody: body, statusCode: response.statusCode });
+    console.log(response.statusCode + ' | ' + desc);
     callback(err, ehrscapeRequest);
   });
 }
@@ -63,13 +69,13 @@ EhrscapeRequest.getSession = function(callback) {
   }, callback);
 }
 
-EhrscapeRequest.createPatient = function(postPartyBody, callback) {
+EhrscapeRequest.createPatient = function(title, postPartyBody, callback) {
   var options = {
     url: EhrscapeConfig.baseUrl + 'demographics/party',
     headers: { 'Ehr-Session': EhrscapeConfig.sessionId, 'Content-Type': 'application/json' },
     body: postPartyBody
   };
-  EhrscapeRequest.doPostRequest("Create patient", options, true, function(body) {
+  EhrscapeRequest.doPostRequest("Create patient (" + title + ")", options, true, function(body) {
     var body = JSON.parse(body);
     var subjectId = body.meta.href;
     EhrscapeConfig.subjectId = subjectId.substr(subjectId.lastIndexOf('/')+1);
@@ -78,7 +84,7 @@ EhrscapeRequest.createPatient = function(postPartyBody, callback) {
 
 EhrscapeRequest.createPatientDefault = function(callback) {
   var postPartyBody = fs.readFileSync('src/assets/sample_requests/party.json', 'utf8');
-  EhrscapeRequest.createPatient(postPartyBody, callback);
+  EhrscapeRequest.createPatient('Steve Walford', postPartyBody, callback);
 }
 
 EhrscapeRequest.createEhr = function(postEhrBody, subjectId, callback) {
@@ -118,8 +124,12 @@ EhrscapeRequest.updateEhr = function(postEhrBody, ehrId, callback) {
 
 EhrscapeRequest.createPatientAndEhr = function(party, callback) {
   var results = [];
-  EhrscapeRequest.createPatient(party.toJSON(true), function(err, res) {
+  EhrscapeRequest.createPatient(party.getFullName(), party.toJSON(true), function(err, res) {
     results.push(res);
+    if (err) {
+      callback(err, results, null);
+      return;
+    }
     EhrscapeRequest.createEhr(null, party.getSubjectId(), function(err, res) {
       results.push(res);
       var ehrId;
@@ -128,17 +138,21 @@ EhrscapeRequest.createPatientAndEhr = function(party, callback) {
         ehrId = body.ehrId;
         EhrscapeRequest.updateEhr(party.getEhrStatusBody(), ehrId, function(err, res) {
           results.push(res);
-          callback(results, ehrId);
+          callback(err, results, ehrId);
         });
       }
       if (res.response.statusCode === 400) {
         EhrscapeRequest.getEhr(party.getSubjectId(), function(err, res) {
           results.push(res);
+          if (err) {
+            callback(err, results, null);
+            return;
+          }
           var body = JSON.parse(res.response.responseBody);
           ehrId = JSON.parse(body).ehrId;
           EhrscapeRequest.updateEhr(party.getEhrStatusBody(), ehrId, function(err, res) {
             results.push(res);
-            callback(results, ehrId);
+            callback(err, results, ehrId);
           });
         });
       }

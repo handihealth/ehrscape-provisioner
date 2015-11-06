@@ -43,6 +43,10 @@ Patient.prototype.toJSON = function(prettyPrint) {
   return JSON.stringify(party, null, indent);
 };
 
+Patient.prototype.getFullName = function() {
+  return this.data[Patient.FIRST_NAME_INDEX] + ' ' + this.data[Patient.LAST_NAME_INDEX];
+};
+
 Patient.prototype.getAddress = function() {
   var address = [this.data[Patient.ADDRESS_LINE1_INDEX], this.data[Patient.ADDRESS_LINE2_INDEX], this.data[Patient.ADDRESS_LINE3_INDEX], this.data[Patient.POSTCODE_INDEX]];
   return address.join(', ');
