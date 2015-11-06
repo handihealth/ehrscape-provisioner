@@ -41,8 +41,8 @@ router.post('/provision/multiple-patient', function(req, masterResponse, next) {
       EhrscapeRequest.uploadTemplate('Problems', 'src/assets/sample_requests/problems-template.xml', function(err, res) {
         results.push(res);
 
-        var patientsToLoad = 3;
-        for (var i = 1; i < 4; i++) {
+        var patientsToLoad = patients.length - 1;
+        for (var i = 1; i < patients.length; i++) {
           var party = new Patient(patients[i]);
           EhrscapeRequest.createPatientAndEhr(party, function(res, ehrId) {
             results = results.concat(res);
@@ -64,7 +64,7 @@ router.post('/provision/multiple-patient', function(req, masterResponse, next) {
               });
 
             }
-            
+
           });
         };
 
