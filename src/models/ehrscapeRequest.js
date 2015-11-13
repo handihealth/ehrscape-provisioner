@@ -20,7 +20,7 @@ EhrscapeRequest.doPostRequest = function(desc, options, showRequestBody, onRespo
   var startDate = Date.now();
   request.post(options, function(error, response, body) {
     var timeTaken = (Date.now() - startDate) + 'ms';
-    var err = (response.statusCode !== 200 && response.statusCode !== 201) ? true : null;
+    var err = (response == undefined || (response.statusCode !== 200 && response.statusCode !== 201)) ? true : null;
     if (!err) {
       onResponse(body);
     }
@@ -34,7 +34,7 @@ EhrscapeRequest.doPutRequest = function(desc, options, showRequestBody, onRespon
   var startDate = Date.now();
   request.put(options, function(error, response, body) {
     var timeTaken = (Date.now() - startDate) + 'ms';
-    var err = (response.statusCode !== 200 && response.statusCode !== 201) ? true : null;
+    var err = (response == undefined || (response.statusCode !== 200 && response.statusCode !== 201)) ? true : null;
     if (!err) {
       onResponse(body);
     }
@@ -48,7 +48,7 @@ EhrscapeRequest.doGetRequest = function(desc, options, showRequestBody, onRespon
   var startDate = Date.now();
   request.get(options, function(error, response, body) {
     var timeTaken = (Date.now() - startDate) + 'ms';
-    var err = (response.statusCode !== 200 && response.statusCode !== 201) ? true : null;
+    var err = (response == undefined || (response.statusCode !== 200 && response.statusCode !== 201)) ? true : null;
     if (!err) {
       onResponse(body);
     }
