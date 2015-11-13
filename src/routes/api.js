@@ -30,7 +30,7 @@ router.post('/provision/multiple-patient', function(req, masterResponse, next) {
 
   setConfigFromRequest(req.body);
   var csvParser = new CsvParser('src/assets/data/patients.csv');
-  var problemTemplateNumCycle = new NumberCycle(1, 3);
+  var problemTemplateNumCycle = new NumberCycle(1, 3, [[1,2,3,4,5,6], [1,2,3,4], [1,2,3,4,5]]);
   var results = [];
   var errorCount = 0;
 
@@ -58,13 +58,17 @@ router.post('/provision/multiple-patient', function(req, masterResponse, next) {
             if (err) {
               patientError = true;
             } else {
-              var templateNum = problemTemplateNumCycle.get();
-              EhrscapeRequest.uploadComposition('Problems ' + templateNum, 'src/assets/sample_requests/problems-composition-' + templateNum + '.json', ehrId, 'IDCR Problem List.v1', function(err, res) {
-                results.push(res);
-                if (err) {
-                  compositionError = true;
-                }
-              });
+              var template = problemTemplateNumCycle.get();
+              for (var i = template.subVersions.length - 1; i >= 0; i--) {
+                var templateVersion = template.version + '_' + template.subVersions[i];
+                var templateName = templateVersion + '_IDCR ProblemList.v1.json';
+                EhrscapeRequest.uploadComposition('Problems ' + ehrId + '/' + templateVersion, 'src/assets/sample_requests/' + templateName, ehrId, 'IDCR Problem List.v1', function(err, res) {
+                  results.push(res);
+                  if (err) {
+                    compositionError = true;
+                  }
+                });
+              };
             }
             if (patientsToLoad === 0) {
               if (!patientError && !compositionError) {

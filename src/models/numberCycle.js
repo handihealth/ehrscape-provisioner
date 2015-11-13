@@ -1,7 +1,8 @@
-var NumberCycle = function(min, max) {
+var NumberCycle = function(min, max, subCycles) {
   this.min = min;
   this.max = max;
   this.current = min;
+  this.subCycles = subCycles;
 }
 
 NumberCycle.prototype.get = function() {
@@ -11,7 +12,7 @@ NumberCycle.prototype.get = function() {
     next = this.min;
   }
   this.current = next;
-  return current;
+  return { version: current, subVersions: this.subCycles[current-1] };
 };
 
 module.exports = NumberCycle;
