@@ -41,7 +41,7 @@ router.post('/provision/multiple-patient', function(req, masterResponse, next) {
         masterResponse.json({ status: 'FAILED', numberOfRequests: results.length, requests: results, config: EhrscapeConfig });
         return;
       }
-      EhrscapeRequest.uploadTemplate('Problems', 'src/assets/sample_requests/problems-template.xml', function(err, res) {
+      EhrscapeRequest.uploadTemplate('Problems', 'src/assets/sample_requests/problems/problems-template.xml', function(err, res) {
         results.push(res);
         if (err) {
           masterResponse.json({ status: 'FAILED', numberOfRequests: results.length, requests: results, config: EhrscapeConfig });
@@ -62,7 +62,7 @@ router.post('/provision/multiple-patient', function(req, masterResponse, next) {
               for (var i = template.subVersions.length - 1; i >= 0; i--) {
                 var templateVersion = template.version + '_' + template.subVersions[i];
                 var templateName = templateVersion + '_IDCR ProblemList.v1.json';
-                EhrscapeRequest.uploadComposition('Problems ' + ehrId + '/' + templateVersion, 'src/assets/sample_requests/' + templateName, ehrId, 'IDCR Problem List.v1', function(err, res) {
+                EhrscapeRequest.uploadComposition('Problems ' + ehrId + '/' + templateVersion, 'src/assets/sample_requests/problems/' + templateName, ehrId, 'IDCR Problem List.v1', function(err, res) {
                   results.push(res);
                   if (err) {
                     compositionError = true;
@@ -72,7 +72,7 @@ router.post('/provision/multiple-patient', function(req, masterResponse, next) {
             }
             if (patientsToLoad === 0) {
               if (!patientError && !compositionError) {
-                EhrscapeRequest.uploadTemplate('Vital signs', 'src/assets/sample_requests/vital-signs-template.xml', function(err, res) {
+                EhrscapeRequest.uploadTemplate('Vital signs', 'src/assets/sample_requests/vital-signs/vital-signs-template.xml', function(err, res) {
                   results.push(res);
                   if (err) {
                     masterResponse.json({ status: 'FAILED', numberOfRequests: results.length, requests: results, config: EhrscapeConfig });
