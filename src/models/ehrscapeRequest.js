@@ -140,12 +140,12 @@ EhrscapeRequest.updateEhr = function(postEhrBody, ehrId, callback) {
   EhrscapeRequest.doPutRequest("Update EHR", options, true, function(body) {}, callback);
 }
 
-EhrscapeRequest.createPatientAndEhr = function(party, callback) {
+EhrscapeRequest.createPatientAndEhr = function(party, orderTemplateNumCycle, problemTemplateNumCycle, callback) {
   var results = [];
   EhrscapeRequest.createPatient(party.getFullName(), party.toJSON(true), function(err, res) {
     results.push(res);
     if (err) {
-      callback(err, results, null);
+      callback(err, results, null, party);
       return;
     }
     EhrscapeRequest.createEhr(null, party.getSubjectId(), function(err, res) {
@@ -156,21 +156,29 @@ EhrscapeRequest.createPatientAndEhr = function(party, callback) {
         ehrId = body.ehrId;
         EhrscapeRequest.updateEhr(party.getEhrStatusBody(), ehrId, function(err, res) {
           results.push(res);
-          callback(err, results, ehrId);
+          callback(err, results, ehrId, party);
         });
       }
       if (res.response.statusCode === 400) {
         EhrscapeRequest.getEhr(party.getSubjectId(), function(err, res) {
           results.push(res);
           if (err) {
-            callback(err, results, null);
+            callback(err, results, null, party);
             return;
           }
           var body = JSON.parse(res.response.responseBody);
           ehrId = JSON.parse(body).ehrId;
           EhrscapeRequest.updateEhr(party.getEhrStatusBody(), ehrId, function(err, res) {
             results.push(res);
-            callback(err, results, ehrId);
+            if (err) {
+              callback(err, results, null, party);
+              return;
+            }
+            EhrscapeRequest.uploadCompositions(ehrId, orderTemplateNumCycle, problemTemplateNumCycle, function(err, res) {
+              results = results.concat(res);
+              callback(err, results, ehrId, party);
+            });
+
           });
         });
       }
@@ -208,6 +216,37 @@ EhrscapeRequest.uploadComposition = function(title, compositionFilePath, ehrId, 
 
 EhrscapeRequest.uploadCompositionDefault = function(callback) {
   EhrscapeRequest.uploadComposition('Vital signs', 'src/assets/sample_requests/vital-signs/vital-signs-composition.json', EhrscapeConfig.ehrId, EhrscapeConfig.templateId, callback);
+}
+
+EhrscapeRequest.uploadCompositions = function(ehrId, orderTemplateNumCycle, problemTemplateNumCycle, callback) {
+  var results = [];
+
+  var orderTemplateName = 'IDCR Lab Order FLAT ' + orderTemplateNumCycle.get().version + '.json';
+  EhrscapeRequest.uploadComposition('Orders ' + ehrId, 'src/assets/sample_requests/orders/' + orderTemplateName, ehrId, 'IDCR - Laboratory Order.v0', function(err, res) {
+    results.push(res);
+    if (res.statusCode == 404) {
+      console.log(res.responseBody);
+    }
+
+    var problemTemplate = problemTemplateNumCycle.get();
+    var problemTemplatesToLoad = problemTemplate.subVersions.length;
+
+    for (var i = problemTemplate.subVersions.length - 1; i >= 0; i--) {
+      var templateVersion = problemTemplate.version + '_' + problemTemplate.subVersions[i];
+      var templateName = templateVersion + '_IDCR ProblemList.v1.json';
+      EhrscapeRequest.uploadComposition('Problems ' + ehrId + '/' + templateVersion, 'src/assets/sample_requests/problems/' + templateName, ehrId, 'IDCR Problem List.v1', function(err, res) {
+        results.push(res);
+        problemTemplatesToLoad -= 1;
+        console.log('problemTemplatesToLoad = ' + problemTemplatesToLoad);
+        if (problemTemplatesToLoad === 0) {
+          console.log('calling callback');
+          callback(err, results);
+        }
+      });
+    }
+
+  });
+
 }
 
 EhrscapeRequest.importCsv = function(csvFilePath, callback) {
