@@ -32,6 +32,18 @@ The default base URL for the ehrscape instance is _https://ehrscape.code-4-healt
 }
 ```
 
+Due to an issue trying to provision all patients at once the patients CSV file has been split into 5, each called patients[num].csv. By default it will use patients1.csv, but this can be overridden as follows: -
+
+```
+{
+  "username": "my_username",
+  "password": "my_password",
+  "baseUrl": "https://my.ehrscape.url/rest/v1/",
+  "subjectNamespace": "uk.nhs.nhs_number",
+  "patientsFile": "patients1.csv"
+}
+```
+
 ## Development
 
 ### Docker
