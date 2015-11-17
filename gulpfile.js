@@ -79,7 +79,7 @@ gulp.task('sass', function () {
 });
 
 gulp.task('copy-sample-requests', function() {
-  gulp.src(['./src/assets/sample_requests/*.*'])
+  gulp.src(['./src/assets/sample_requests/*.*', './src/assets/sample_requests/**/*.*'])
     .pipe(gulp.dest('./public/data'));
 });
 
