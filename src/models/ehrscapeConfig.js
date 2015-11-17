@@ -1,4 +1,5 @@
 var EhrscapeConfig = {
+  patientsFile: 'patients1.csv',
   baseUrl: 'https://ehrscape.code-4-health.org/rest/v1/',
   username: '',
   password: '',
