@@ -30,6 +30,7 @@ router.post('/provision/multiple-patient', function(req, masterResponse, next) {
 
   setConfigFromRequest(req.body);
   var csvParser = new CsvParser('src/assets/data/' + EhrscapeConfig.patientsFile);
+  var allergyTemplateNumCycle = new NumberCycle(1, 6, []);
   var problemTemplateNumCycle = new NumberCycle(1, 3, [[1,2,3,4,5,6], [1,2,3,4], [1,2,3,4,5]]);
   var orderTemplateNumCycle = new NumberCycle(1, 12, []);
   var results = [];
@@ -60,7 +61,7 @@ router.post('/provision/multiple-patient', function(req, masterResponse, next) {
           var patientsToLoad = patients.length - 1;
           for (var i = 1; i < patients.length; i++) {
             var party = new Patient(patients[i]);
-            EhrscapeRequest.createPatientAndEhr(party, orderTemplateNumCycle, problemTemplateNumCycle, function(err, res, ehrId, party) {
+            EhrscapeRequest.createPatientAndEhr(party, allergyTemplateNumCycle, orderTemplateNumCycle, problemTemplateNumCycle, function(err, res, ehrId, party) {
               results = results.concat(res);
               patientsToLoad -= 1;
               if (err) {
