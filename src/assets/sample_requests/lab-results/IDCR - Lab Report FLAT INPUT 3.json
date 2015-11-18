@@ -50,5 +50,5 @@
  "laboratory_test_report/laboratory_test/laboratory_test_panel/laboratory_result:3/result_value/_normal_range/lower|magnitude": "3.5",
  "laboratory_test_report/laboratory_test/laboratory_test_panel/laboratory_result:3/result_value/_normal_range/lower|unit": "mmol/l",
  "laboratory_test_report/laboratory_test/laboratory_test_panel/laboratory_result:3/result_value/_normal_range/upper|magnitude": "5.3",
- "laboratory_test_report/laboratory_test/laboratory_test_panel/laboratory_result:3/result_value/_normal_range/upper|unit": "mmol/l",
+ "laboratory_test_report/laboratory_test/laboratory_test_panel/laboratory_result:3/result_value/_normal_range/upper|unit": "mmol/l"
 }
