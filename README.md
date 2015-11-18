@@ -12,7 +12,9 @@ From the index page of the app, you can enter your Ehrscape username and passwor
 
 ### API
 
-If you would like to carry out the same provision using an API call then use an HTTP client of your choice (such as Postman) and create a POST request to `/api/provision` with the request body specified as:
+#### Single patient
+
+If you would like to carry out the same provision using an API call then use an HTTP client of your choice (such as Postman) and create a POST request to `/api/provision/single-patient` with the request body specified as:
 
 ```
 {
@@ -21,13 +23,59 @@ If you would like to carry out the same provision using an API call then use an 
 }
 ```
 
-The base URL for the ehrscape instance is set to https://ehrscape.code-4-health.org/rest/v1/ but can be overridden by also supplying it in the request body, such as:
+The default base URL for the ehrscape instance is _https://ehrscape.code-4-health.org/rest/v1/_ but can be overridden by also supplying it in the request body. The default subject namespace is _uk.nhs.hospital_number_ but this can also be overridden in the same way. See the following example: -
 
 ```
 {
   "username": "my_username",
   "password": "my_password",
-  "baseUrl": "https://my.ehrscape.url/rest/v1/"
+  "baseUrl": "https://my.ehrscape.url/rest/v1/",
+  "subjectNamespace": "uk.nhs.nhs_number"
+}
+```
+
+#### Multiple patient
+
+You can use the API endpoint `/api/provision/multiple-patient` to provision multiple patients from a CSV file. Currently the following requests will be made to upon POSTing to the API: -
+
+- Create session
+- Upload template (Allergies)
+- Upload template (Procedures)
+- Upload template (Problems)
+- Upload template (Lab results)
+- Upload template (Orders)
+- Per patient in the CSV file
+    - Create patient
+    - Create EHR
+    - Get EHR (Only if Create EHR returns 400, indicting an EHR already exists)
+    - Update EHR
+    - Upload composition (Orders)
+    - Upload composition (Allergies)
+    - Upload composition (Procedures)
+    - Upload composition (Lab results)
+    - Upload composition (Problems)
+- Upload template (Vital signs)
+- Import CSV (Vital signs)
+
+The result of the API post will be a JSON object like the following:
+
+```
+{
+  "status": "SUCCESSFUL",
+  "numberOfRequests": 265,
+  "requests": [] // array of all requests made, including url, request body, time taken, response status code and body
+}
+```
+
+Due to an issue trying to provision all patients at once the patients CSV file has been split into 5, each called patients[num].csv. By default it will use patients1.csv, but this can be overridden as follows: -
+
+```
+{
+  "username": "my_username",
+  "password": "my_password",
+  "baseUrl": "https://my.ehrscape.url/rest/v1/",
+  "subjectNamespace": "uk.nhs.nhs_number",
+  "patientsFile": "patients1.csv"
 }
 ```
 
