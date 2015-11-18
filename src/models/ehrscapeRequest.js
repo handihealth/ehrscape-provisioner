@@ -140,7 +140,7 @@ EhrscapeRequest.updateEhr = function(postEhrBody, ehrId, callback) {
   EhrscapeRequest.doPutRequest("Update EHR", options, true, function(body) {}, callback);
 }
 
-EhrscapeRequest.createPatientAndEhr = function(party, allergyTemplateNumCycle, proceduresTemplateNumCycle, labResultsTemplateNumCycle, orderTemplateNumCycle, problemTemplateNumCycle, callback) {
+EhrscapeRequest.createPatientEhrAndCompositions = function(party, allergyTemplateNumCycle, proceduresTemplateNumCycle, labResultsTemplateNumCycle, orderTemplateNumCycle, problemTemplateNumCycle, callback) {
   var results = [];
   EhrscapeRequest.createPatient(party.getFullName(), party.toJSON(true), function(err, res) {
     results.push(res);

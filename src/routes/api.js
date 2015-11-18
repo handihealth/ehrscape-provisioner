@@ -63,7 +63,7 @@ router.post('/provision/multiple-patient', function(req, masterResponse, next) {
           var patientsToLoad = patients.length - 1;
           for (var i = 1; i < patients.length; i++) {
             var party = new Patient(patients[i]);
-            EhrscapeRequest.createPatientAndEhr(party, allergyTemplateNumCycle, proceduresTemplateNumCycle, labResultsTemplateNumCycle, orderTemplateNumCycle, problemTemplateNumCycle, function(err, res, ehrId, party) {
+            EhrscapeRequest.createPatientEhrAndCompositions(party, allergyTemplateNumCycle, proceduresTemplateNumCycle, labResultsTemplateNumCycle, orderTemplateNumCycle, problemTemplateNumCycle, function(err, res, ehrId, party) {
               results = results.concat(res);
               patientsToLoad -= 1;
               if (err) {
