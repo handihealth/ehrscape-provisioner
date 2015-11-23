@@ -90,6 +90,7 @@ router.post('/provision/multiple-patient', function(req, masterResponse, next) {
                     if (err) {
                       console.log('patientError found. ' + party.getFullName());
                       patientError = true;
+                      masterResponse.json({ status: 'FAILED', numberOfRequests: results.length, requests: results, config: EhrscapeConfig });
                     } else {
                       console.log('patientsToLoad = ' + patientsToLoad);
                       if (patientsToLoad === 0) {
