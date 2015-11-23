@@ -87,31 +87,29 @@ router.post('/provision/multiple-patient', function(req, masterResponse, next) {
                   EhrscapeRequest.createPatientEhrAndCompositions(party, allergyTemplateNumCycle, proceduresTemplateNumCycle, labResultsTemplateNumCycle, orderTemplateNumCycle, problemTemplateNumCycle, function(err, res, ehrId, party) {
                     results = results.concat(res);
                     patientsToLoad -= 1;
+                    console.log('patientsToLoad = ' + patientsToLoad);
                     if (err) {
                       console.log('patientError found. ' + party.getFullName());
                       patientError = true;
-                      masterResponse.json({ status: 'FAILED', numberOfRequests: results.length, requests: results, config: EhrscapeConfig });
-                    } else {
-                      console.log('patientsToLoad = ' + patientsToLoad);
-                      if (patientsToLoad === 0) {
-                        if (!patientError) {
-                          console.log('no errors found.');
-                          EhrscapeRequest.uploadTemplate('Vital signs', 'src/assets/sample_requests/vital-signs/vital-signs-template.xml', function(err, res) {
-                            results.push(res);
-                            if (err) {
-                              masterResponse.json({ status: 'FAILED', numberOfRequests: results.length, requests: results, config: EhrscapeConfig });
-                            } else {
-                              EhrscapeRequest.importCsv('src/assets/data/nursing-obs.csv', function(err, res) {
-                                results.push(res);
-                                var overallStatus = err ? 'FAILED' : 'SUCCESSFUL';
-                                masterResponse.json({ status: overallStatus, numberOfRequests: results.length, requests: results, config: EhrscapeConfig });
-                              });
-                            }
-                          });
-                        } else {
-                          console.log('errors found.');
-                          masterResponse.json({ status: 'FAILED', numberOfRequests: results.length, requests: results, config: EhrscapeConfig });
-                        }
+                    }
+                    if (patientsToLoad === 0) {
+                      if (!patientError) {
+                        console.log('no errors found.');
+                        EhrscapeRequest.uploadTemplate('Vital signs', 'src/assets/sample_requests/vital-signs/vital-signs-template.xml', function(err, res) {
+                          results.push(res);
+                          if (err) {
+                            masterResponse.json({ status: 'FAILED', numberOfRequests: results.length, requests: results, config: EhrscapeConfig });
+                          } else {
+                            EhrscapeRequest.importCsv('src/assets/data/nursing-obs.csv', function(err, res) {
+                              results.push(res);
+                              var overallStatus = err ? 'FAILED' : 'SUCCESSFUL';
+                              masterResponse.json({ status: overallStatus, numberOfRequests: results.length, requests: results, config: EhrscapeConfig });
+                            });
+                          }
+                        });
+                      } else {
+                        console.log('errors found.');
+                        masterResponse.json({ status: 'FAILED', numberOfRequests: results.length, requests: results, config: EhrscapeConfig });
                       }
                     }
                   });
