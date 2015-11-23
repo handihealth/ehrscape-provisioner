@@ -18,7 +18,7 @@ angular.module('ehrscapeProvisioner.requestData', [])
 
   return {
     get: function(callback) {
-      $http.get('/data/vital-signs-template.xml').success(function(data) {
+      $http.get('/data/vital-signs/vital-signs-template.xml').success(function(data) {
         callback(data);
       });
     }
@@ -30,7 +30,7 @@ angular.module('ehrscapeProvisioner.requestData', [])
 
   return {
     get: function(callback) {
-      $http.get('/data/vital-signs-composition.json').success(function(data) {
+      $http.get('/data/vital-signs/vital-signs-composition.json').success(function(data) {
         callback(data);
       });
     }
