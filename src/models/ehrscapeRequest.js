@@ -153,7 +153,7 @@ EhrscapeRequest.createPatientEhrAndCompositions = function(party, allergyTemplat
       var ehrId;
       if (res.response.statusCode === 201) {
         var body = JSON.parse(res.response.responseBody);
-        ehrId = body.ehrId;
+        ehrId = JSON.parse(body).ehrId;
         EhrscapeRequest.updateEhr(party.getEhrStatusBody(), ehrId, function(err, res) {
           results.push(res);
           callback(err, results, ehrId, party);
